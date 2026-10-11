@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SISA-RTE - Consulta Oficial de Registro, Títulos y Trayectorias</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        :root {
+            --gob-azul: #002746;       
+            --gob-celeste: #337ab7;    
+            --gob-borde: #cccccc;      
+            --gob-fondo: #f1f3f5;      
+            --gob-verde: #28a745;
+        }
+
+        /* Pantalla de Carga Inicial (Splash Screen) */
+        #splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--gob-azul);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            color: white;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        .splash-logo {
+            width: 160px;
+            height: 160px;
+            object-fit: contain;
+            margin-bottom: 25px;
+            /* Círculo blanco y sombras removidas para mostrar el PNG limpio y grande */
+        }
+
+        .splash-title {
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+
+        .splash-subtitle {
+            font-size: 13px;
+            color: #adb5bd;
+            margin-bottom: 25px;
+            letter-spacing: 0.5px;
+        }
+
+        .splash-spinner {
+            width: 35px;
+            height: 35px;
+            border: 4px solid rgba(255,255,255,0.2);
+            border-radius: 50%;
+            border-top-color: #6ab04c;
+            animation: spin 0.8s ease-in-out infinite;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--gob-fondo);
+            background-image: radial-gradient(#d1d8e0 0.75px, transparent 0.75px), radial-gradient(#d1d8e0 0.75px, var(--gob-fondo) 0.75px);
+            background-size: 30px 30px;
+            background-position: 0 0, 15px 15px;
+            color: #212529;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .gob-header-bar {
+            background-color: var(--gob-azul);
+            color: white;
+            padding: 14px 20px;
+            border-bottom: 4px solid #6ab04c; 
+        }
+
+        .gob-header-content {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .gob-header-left {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .gob-header-title {
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: 0.6px;
+            text-transform: uppercase;
+        }
+
+        .gob-header-subtitle {
+            font-size: 12px;
+            color: #adb5bd;
+            font-weight: 400;
+        }
+
+        .gob-header-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .gob-logo-graphic {
+            width: 36px;
+            height: 36px;
+            background-color: #ffffff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .main-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background: #ffffff;
+            padding: 35px;
+            border: 1px solid var(--gob-borde);
+            border-radius: 6px; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+            margin-bottom: 30px;
+        }
+
+        .gob-alert {
+            background-color: #e8f4fd;
+            border-left: 4px solid var(--gob-celeste);
+            padding: 14px 16px;
+            margin-bottom: 25px;
+            font-size: 13.5px;
+            color: #084298;
+            line-height: 1.6;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .gob-alert strong {
+            color: var(--gob-azul);
+        }
+
+        .system-status-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #eafaf1;
+            border: 1px solid #a3e4d7;
+            padding: 10px 14px;
+            border-radius: 4px;
+            font-size: 12.5px;
+            color: #145a32;
+            margin-bottom: 25px;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background-color: var(--gob-verde);
+            border-radius: 50%;
+            margin-right: 6px;
+            box-shadow: 0 0 0 2px rgba(40, 167, 69, 0.2);
+        }
+
+        h2 {
+            color: var(--gob-azul);
+            font-size: 20px;
+            font-weight: 700;
+            margin-top: 0;
+            border-bottom: 2px solid var(--gob-azul);
+            padding-bottom: 8px;
+            letter-spacing: -0.2px;
+        }
+
+        h3 {
+            color: var(--gob-azul);
+            font-size: 16px;
+            font-weight: 600;
+            margin-top: 25px;
+            margin-bottom: 12px;
+        }
+
+        p {
+            font-size: 14px;
+            color: #495057;
+            line-height: 1.6;
+        }
+
+        .search-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            margin-bottom: 15px;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 12px 14px;
+            border: 1px solid var(--gob-borde);
+            border-radius: 4px;
+            font-size: 15px;
+            outline: none;
+            color: #212529;
+            font-family: inherit;
+        }
+
+        input[type="text"]:focus {
+            border-color: var(--gob-celeste);
+            box-shadow: 0 0 0 3px rgba(51, 122, 183, 0.15);
+        }
+
+        button.btn-search {
+            padding: 12px 24px;
+            background-color: var(--gob-celeste);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14.5px;
+            font-weight: 600;
+            font-family: inherit;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 120px;
+        }
+
+        button.btn-search:hover:not(:disabled) {
+            background-color: #286090;
+        }
+
+        button.btn-search:disabled {
+            background-color: #6c757d;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .art12-subtle-note {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-left: 3px solid #f0ad4e;
+            padding: 12px 15px;
+            border-radius: 4px;
+            font-size: 13px;
+            color: #6c757d;
+            line-height: 1.5;
+            margin-top: 15px;
+        }
+
+        .art12-subtle-note strong {
+            color: #8a6d3b;
+        }
+
+        .info-section {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .info-card {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            padding: 15px;
+            border-radius: 4px;
+            font-size: 13px;
+            color: #555;
+            line-height: 1.5;
+        }
+
+        .info-card strong {
+            color: var(--gob-azul);
+            display: block;
+            margin-bottom: 6px;
+            font-size: 13.5px;
+        }
+
+        .faq-section {
+            margin-top: 35px;
+            padding-top: 20px;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .faq-item {
+            background: #fdfefe;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            padding: 14px 16px;
+        }
+
+        .faq-question {
+            font-weight: 600;
+            color: var(--gob-azul);
+            font-size: 13.5px;
+            margin-bottom: 5px;
+        }
+
+        .faq-answer {
+            font-size: 13px;
+            color: #555;
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        .spinner {
+            width: 18px;
+            height: 18px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: #ffffff;
+            animation: spin 0.8s ease-in-out infinite;
+            display: none;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .msg-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            padding: 12px;
+            border-radius: 4px;
+            font-size: 13.5px;
+            display: none;
+            margin-top: 15px;
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 15px;
+        }
+
+        .modal-content {
+            background: #ffffff;
+            width: 100%;
+            max-width: 650px;
+            border-radius: 6px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            overflow: hidden;
+            animation: fadeIn 0.3s ease;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .modal-header {
+            background-color: var(--gob-azul);
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            font-size: 15px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: white;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 22px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .modal-body {
+            padding: 25px;
+            overflow-y: auto;
+        }
+
+        .data-row {
+            display: flex;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #f1f3f5;
+            font-size: 13px;
+        }
+
+        .data-row:last-child {
+            border-bottom: none;
+        }
+
+        .data-row strong {
+            width: 190px;
+            color: #343a40;
+            font-weight: 600;
+        }
+
+        .data-row span {
+            flex: 1;
+            color: #212529;
+        }
+
+        .badge-official {
+            background-color: var(--gob-verde);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 11.5px;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+        }
+
+        .badge-inactive {
+            background-color: #d9534f;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 11.5px;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+        }
+
+        .btn-view-credential {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background-color: #f0f4f8;
+            color: var(--gob-azul);
+            border: 1px solid #b6d4fe;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .btn-view-credential:hover {
+            background-color: #e8f4fd;
+            border-color: var(--gob-celeste);
+        }
+
+        .verification-box {
+            margin-top: 15px;
+            background-color: #f8f9fa;
+            border: 1px dashed var(--gob-borde);
+            padding: 12px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .qr-container img {
+            width: 75px;
+            height: 75px;
+            display: block;
+            border: 1px solid #ddd;
+            background: #fff;
+            padding: 2px;
+        }
+
+        .qr-info {
+            font-size: 11.5px;
+            color: #555;
+            line-height: 1.4;
+        }
+
+        .qr-info strong {
+            color: var(--gob-azul);
+            display: block;
+            margin-bottom: 3px;
+            font-size: 12px;
+        }
+
+        .modal-footer {
+            background-color: #f8f9fa;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            border-top: 1px solid var(--gob-borde);
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .modal-footer-left {
+            display: flex;
+            gap: 10px;
+        }
+
+        button.btn-reset, button.btn-close-modal {
+            padding: 10px 16px;
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            font-family: inherit;
+        }
+
+        button.btn-reset:hover, button.btn-close-modal:hover {
+            background-color: #5a6268;
+        }
+
+        button.btn-pdf {
+            padding: 10px 16px;
+            background-color: #d9534f;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            font-family: inherit;
+        }
+
+        button.btn-pdf:hover {
+            background-color: #c9302c;
+        }
+
+        button.btn-print {
+            padding: 10px 16px;
+            background-color: #5bc0de;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            font-family: inherit;
+        }
+
+        button.btn-print:hover {
+            background-color: #31b0d5;
+        }
+
+        .info-modal-item {
+            margin-bottom: 15px;
+        }
+
+        .info-modal-item h4 {
+            margin: 0 0 5px 0;
+            color: var(--gob-azul);
+            font-size: 14px;
+        }
+
+        .info-modal-item p {
+            margin: 0;
+            font-size: 13px;
+            color: #555;
+        }
+
+        .gob-footer {
+            background-color: #1a1a1a;
+            color: #cccccc;
+            padding: 30px 20px;
+            font-size: 12.5px;
+            border-top: 4px solid var(--gob-celeste);
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .gob-footer-content {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .gob-footer-links {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            border-bottom: 1px solid #333333;
+            padding-bottom: 15px;
+        }
+
+        .gob-footer-links a {
+            color: #ffffff;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .gob-footer-links a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ========================================== -->
+    <!-- PANTALLA DE CARGA / SPLASH SCREEN INICIAL  -->
+    <!-- ========================================== -->
+    <div id="splash-screen">
+        <img src="https://i.postimg.cc/PrCh5GC5/489641.png" alt="Logo SISA-RTE" class="splash-logo">
+        <div class="splash-title">SISA-RTE</div>
+        <div class="splash-subtitle">Ingresando al sistema seguro...</div>
+        <div class="splash-spinner"></div>
+    </div>
+
+    <header class="gob-header-bar">
+        <div class="gob-header-content">
+            <div class="gob-header-left">
+                <div class="gob-header-title">sisa-rte.com.ar &bull; SISA-RTE</div>
+                <div class="gob-header-subtitle">Ministerio de Salud &bull; Registro de Trayectorias</div>
+            </div>
+            <div class="gob-header-logo">
+    <a href="https://tu-enlace-aqui.com" target="_blank" style="display: flex; align-items: center; text-decoration: none;">
+        <img src="https://i.postimg.cc/PrCh5GC5/489641.png" alt="Mi Logo" style="width: 36px; height: 36px; object-fit: contain;">
+    </a>
+</div>
+        </div>
+    </header>
+
+    <div class="main-wrapper">
+        <div class="container">
+            
+            <div class="gob-alert">
+                <strong>Garantía y Validez Oficial:</strong> Este portal complementario opera bajo directivas de sincronización segura del <strong>SISA-RTE</strong>. Todo perfil registrado cuenta con respaldo documental legalizado para su ejercicio profesional en todo el territorio nacional.
+            </div>
+
+            <div class="system-status-bar">
+                <div>
+                    <span class="status-indicator"></span><strong>Servidor Operativo</strong>
+                </div>
+                <div id="currentDateDisplay" style="font-weight: 500;"></div>
+            </div>
+
+            <h2>Consulta de Registro y Trayectorias Profesionales</h2>
+            <p>Ingrese el número de Documento Nacional de Identidad (DNI) sin puntos para verificar el estado de habilitación, títulos registrados y constancias asociadas.</p>
+
+            <div class="search-group">
+                <input type="text" id="dniInput" placeholder="Ingrese número de DNI" maxlength="8">
+                <button class="btn-search" id="btnConsultar" onclick="buscarDNI()">
+                    <span id="btnText">Consultar</span>
+                    <div class="spinner" id="btnSpinner"></div>
+                </button>
+            </div>
+
+            <div id="errorMsg" class="msg-error"></div>
+
+            <div class="art12-subtle-note">
+                <strong>ℹ️ Nota sobre Art. 12:</strong> Los expedientes bajo este régimen de regularización excepcional cuentan con plena validez jurídica federal una vez asentados en los registros oficiales del SISA-RTE.
+            </div>
+
+            <div class="info-section">
+                <h3>Seguridad y Respaldo Documental</h3>
+                <div class="info-grid">
+                    <div class="info-card">
+                        <strong>🔒 Trazabilidad Digital Segura</strong>
+                        Cada expediente procesado cuenta con un código Hash irrepetible y un sistema de verificación cruzada que impide alteraciones o fraudes documentales.
+                    </div>
+                    <div class="info-card">
+                        <strong>📄 Descarga con Certificación QR</strong>
+                        Al verificar su DNI, el sistema genera una constancia en PDF provista de un código QR institucional apto para escaneo y validación inmediata.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-section">
+                <h3>Preguntas Frecuentes de Profesionales</h3>
+                <div class="faq-item">
+                    <div class="faq-question">¿Los títulos por Art. 12 son reconocidos en todo el país?</div>
+                    <p class="faq-answer">Sí. Al estar debidamente asentados y sincronizados en los registros oficiales del SISA-RTE, cuentan con validez legal federal para el ejercicio de la profesión.</p>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">¿Qué debo hacer si mi constancia aparece como activa?</div>
+                    <p class="faq-answer">Puede descargar el PDF oficial desde este mismo portal mediante el botón correspondiente, el cual incluye su enlace directo al legajo digital y el código QR de autenticidad.</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Modal de Resultados -->
+    <div id="resultModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Ficha Oficial de Registro SISA-RTE</h3>
+                <button class="close-btn" onclick="cerrarModal()">&times;</button>
+            </div>
+            
+            <div id="pdfContent" class="modal-body" style="background-color: #ffffff;">
+                <div style="text-align: center; margin-bottom: 12px; display: none;" id="pdfWatermark">
+                    <strong style="color: #002746; font-size: 14px;">CONSTANCIA OFICIAL DE REGISTRO Y TRAYECTORIA - SISA-RTE</strong>
+                    <hr style="border: 0; border-top: 1px solid #ccc; margin-top: 6px;">
+                </div>
+
+                <div class="data-row"><strong>Apellido y Nombres:</strong> <span id="resNombre">-</span></div>
+                <div class="data-row"><strong>Documento (DNI):</strong> <span id="resDni">-</span></div>
+                <div class="data-row"><strong>Título / Especialidad:</strong> <span id="resTitulo">-</span></div>
+                <div class="data-row"><strong>Acceso a Legajo (Drive):</strong> <span><a href="#" id="resLinkDrive" target="_blank" class="btn-view-credential">Ver Archivo PDF Respaldo</a></span></div>
+                <div class="data-row"><strong>Matrícula / Registro Único:</strong> <span id="resMatricula">-</span></div>
+                <div class="data-row"><strong>Jurisdicción de Emisión:</strong> <span id="resJurisdiccion">-</span></div>
+                <div class="data-row"><strong>Organismo de Origen:</strong> <span id="resOrganismo">-</span></div>
+                <div class="data-row"><strong>Marco Legal / Vía:</strong> <span id="resExpediente">-</span></div>
+                <div class="data-row"><strong>Estado de Habilitación:</strong> <span id="resEstadoContainer">-</span></div>
+                <div class="data-row"><strong>Fecha y Hora de Consulta:</strong> <span id="resTimestamp">-</span></div>
+                <div class="data-row"><strong>Código Hash Seguro:</strong> <span id="resHash" style="font-family: monospace; font-size: 11.5px; color: #555;">-</span></div>
+
+                <div class="verification-box">
+                    <div class="qr-container">
+                        <img id="qrImage" src="" alt="Código QR de Verificación SISA-RTE">
+                    </div>
+                    <div class="qr-info">
+                        <strong>VALIDACIÓN ELECTRÓNICA OFICIAL</strong>
+                        Escanee este código QR con cualquier dispositivo móvil para contrastar la autenticidad de esta constancia directamente contra el registro seguro de SISA-RTE.
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <div class="modal-footer-left">
+                    <button class="btn-pdf" onclick="descargarPDF()">Descargar PDF</button>
+                    <button class="btn-print" onclick="imprimirConstancia()">Imprimir</button>
+                </div>
+                <button class="btn-reset" onclick="nuevaConsulta()">Nueva Consulta</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modales Informativos del Footer -->
+    <div id="acercaModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Acerca de SISA-RTE</h3>
+                <button class="close-btn" onclick="cerrarModalGeneral('acercaModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Módulo integrado del Sistema Integrado de Información Sanitaria Argentino para la validación de trayectorias formativas y excepciones administrativas.</p>
+            </div>
+            <div class="modal-footer" style="justify-content: flex-end;">
+                <button class="btn-close-modal" onclick="cerrarModalGeneral('acercaModal')">Cerrar</button>
+            </div>
+        </div>
+    </div>
+<div id="normativaModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Marco Normativo Legal</h3>
+                <button class="close-btn" onclick="cerrarModalGeneral('normativaModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Respaldado por resoluciones de regularización ministerial, garantizando la total transparencia y seguridad jurídica de los profesionales registrados.</p>
+            </div>
+            <div class="modal-footer" style="justify-content: flex-end;">
+                <button class="btn-close-modal" onclick="cerrarModalGeneral('normativaModal')">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="ayudaModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Mesa de Ayuda y Contacto</h3>
+                <button class="close-btn" onclick="cerrarModalGeneral('ayudaModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="info-modal-item">
+                    <h4>Atención Telefónica Institucional</h4>
+                    <p>Línea exclusiva para consultas de organismos y validación de expedientes: <strong>0800-333-SISA (7472)</strong>, de lunes a viernes de 08:00 a 19:00 hs.</p>
+                </div>
+                <div class="info-modal-item">
+                    <h4>Correo Electrónico de Soporte</h4>
+                    <p>Para reportar inconvenientes técnicos en la visualización de padrones o incidencias de sistemas: <strong>soporte.sisa@salud.gob.ar</strong></p>
+                </div>
+                <div class="info-modal-item">
+                    <h4>Asistencia Presencial (Trámites Excepcionales)</h4>
+                    <p>Mesa de entradas central habilitada en Av. 9 de Julio 1925, Ciudad Autónoma de Buenos Aires, bajo turno previo gestionado electrónicamente.</p>
+                </div>
+            </div>
+            <div class="modal-footer" style="justify-content: flex-end;">
+                <button class="btn-close-modal" onclick="cerrarModalGeneral('ayudaModal')">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="terminosModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Términos y Condiciones</h3>
+                <button class="close-btn" onclick="cerrarModalGeneral('terminosModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>El uso de este sistema está sujeto a normativas estrictas de confidencialidad y protección de datos personales conforme a la legislación vigente.</p>
+            </div>
+            <div class="modal-footer" style="justify-content: flex-end;">
+                <button class="btn-close-modal" onclick="cerrarModalGeneral('terminosModal')">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="gob-footer">
+        <div class="gob-footer-content">
+            <div class="gob-footer-links">
+                <a onclick="abrirModal('acercaModal')">Acerca de SISA-RTE</a>
+                <a onclick="abrirModal('normativaModal')">Normativa Legal</a>
+                <a onclick="abrirModal('ayudaModal')">Mesa de Ayuda</a>
+                <a onclick="abrirModal('terminosModal')">Términos y Condiciones</a>
+            </div>
+            <div>
+                <p style="margin: 0; color: #999999; font-size: 12px;">
+                    SISA-RTE &bull; Sistema de gestión de trayectorias de excepción del ámbito de la salud de la República Argentina.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const splash = document.getElementById('splash-screen');
+                splash.style.opacity = '0';
+                splash.style.visibility = 'hidden';
+            }, 1200); 
+        });
+
+        let intentosFallidos = 0;
+        let bloqueadoHasta = 0;
+
+      document.addEventListener("DOMContentLoaded", () => {
+            const hoy = new Date();
+            const fechaFormateada = hoy.toLocaleDateString('es-AR', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric'
+            });
+            document.getElementById('currentDateDisplay').innerText = "Actualizado: " + fechaFormateada;
+
+            const dniInput = document.getElementById('dniInput');
+            dniInput.addEventListener('input', (e) => {
+                e.target.value = e.target.value.replace(/[^0-9]/g, '');
+            });
+
+            dniInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    buscarDNI();
+                }
+            });
+        });
+
+        function abrirModal(idModal) {
+            document.getElementById(idModal).style.display = "flex";
+        }
+
+        function cerrarModalGeneral(idModal) {
+            document.getElementById(idModal).style.display = "none";
+        }
+
+        const baseDeDatosDNI = [
+            {
+                dni: "27239643",
+                nombre: "Poli, Luciano Alfredo",
+                titulo: "Médico",
+                linkDrive: "",
+                matricula: "M.N. (SOLICITADA)",
+                jurisdiccion: "Cdad. de La Plata - Provincia de Buenos Aires",
+                organismo: "Dirección Nacional de Registro y Fiscalización Sanitaria",
+                expediente: "Regularización por Artículo 12 / Solicitud de Matriculación",
+                estado: "NOACTIVO",
+                hash: "SISA-RTE-2026-0K8A4B7CB101",
+                qrPersonalizado: "https://i.postimg.cc/YqMRjP7V/October9-052849PM.png"
+            },
+            {
+                dni: "20267760",
+                nombre: "Castaño, Estela Ines",
+                titulo: "Médica Clínica en Dermatología",
+                linkDrive: "https://drive.google.com/file/d/1W1Dsi3IvB3Hv8AHw5Dx04jIa7q3KSYVp/view?usp=drivesdk",
+                matricula: "MP-XXXXX / M.N. XX.XXX (en progreso)",
+                jurisdiccion: "Nación / C.A.B.A.",
+                organismo: "Dirección Nacional de Habilitación y Fiscalización Sanitaria",
+                expediente: "Validación Extraordinaria por Artículo 12",
+                estado: "ACTIVO",
+                hash: "SISA-RTE-2026-3C7D2E9F8A",
+                qrPersonalizado: "https://i.postimg.cc/G2sY9Xc7/September6-120616AM.png"
+            }
+        ];
+
+        function buscarDNI() {
+            const ahoraTiempo = new Date().getTime();
+            const errorMsg = document.getElementById('errorMsg');
+
+            if (bloqueadoHasta > ahoraTiempo) {
+                const segundosRestantes = Math.ceil((bloqueadoHasta - ahoraTiempo) / 1000);
+                errorMsg.innerText = `Demasiados intentos fallidos. Sistema bloqueado temporalmente por ${segundosRestantes} segundos.`;
+                errorMsg.style.display = "block";
+                return;
+            }
+
+            const inputDni = document.getElementById('dniInput').value.trim();
+            const modal = document.getElementById('resultModal');
+            const btnConsultar = document.getElementById('btnConsultar');
+            const btnText = document.getElementById('btnText');
+            const btnSpinner = document.getElementById('btnSpinner');
+
+            errorMsg.style.display = "none";
+
+            if (inputDni.length < 7) {
+                alert("Por favor, ingrese un número de DNI válido de al menos 7 dígitos.");
+              return;
+            }
+
+            btnConsultar.disabled = true;
+            btnText.style.display = "none";
+            btnSpinner.style.display = "block";
+
+            setTimeout(() => {
+                const encontrado = baseDeDatosDNI.find(item => item.dni === inputDni);
+
+                if (encontrado) {
+                    intentosFallidos = 0;
+                    document.getElementById('resNombre').innerText = encontrado.nombre;
+                    document.getElementById('resDni').innerText = encontrado.dni;
+                    document.getElementById('resTitulo').innerText = encontrado.titulo;
+                    
+                    const linkDriveBtn = document.getElementById('resLinkDrive');
+                    if (encontrado.linkDrive && encontrado.linkDrive.includes("http")) {
+                        linkDriveBtn.href = encontrado.linkDrive;
+                        linkDriveBtn.style.display = "inline-flex";
+                    } else {
+                        linkDriveBtn.style.display = "none";
+                    }
+
+                    document.getElementById('resMatricula').innerText = encontrado.matricula;
+                    document.getElementById('resJurisdiccion').innerText = encontrado.jurisdiccion;
+                    document.getElementById('resOrganismo').innerText = encontrado.organismo;
+                    document.getElementById('resExpediente').innerText = encontrado.expediente;
+                    document.getElementById('resHash').innerText = encontrado.hash;
+                    
+                    const estadoContainer = document.getElementById('resEstadoContainer');
+                    if (encontrado.estado === "ACTIVO") {
+                        estadoContainer.innerHTML = '<span class="badge-official">Activo / Válido (SISA-RTE)</span>';
+                    } else {
+                        estadoContainer.innerHTML = '<span class="badge-inactive">Inactivo / Suspendido</span>';
+                    }
+
+                    const ahora = new Date();
+                    const fechaFormateada = ahora.toLocaleDateString('es-AR') + ' a las ' + ahora.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' }) + ' hs';
+                    document.getElementById('resTimestamp').innerText = fechaFormateada;
+                    
+                    let urlQrFinal = encontrado.qrPersonalizado;
+                    if (!urlQrFinal) {
+                        const urlValidacion = `https://sisa.salud.gob.ar/rte/validar?hash=${encontrado.hash}&dni=${encontrado.dni}`;
+                        urlQrFinal = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(urlValidacion)}`;
+                    }
+                    document.getElementById('qrImage').src = urlQrFinal;
+
+                    modal.style.display = "flex";
+                } else {
+                    intentosFallidos++;
+                    if (intentosFallidos >= 3) {
+                        bloqueadoHasta = new Date().getTime() + 15000;
+                        errorMsg.innerText = "Demasiados intentos erróneos consecutivos. Acceso restringido temporalmente por 15 segundos.";
+                    } else {
+                        errorMsg.innerText = "No se registran datos vinculados al DNI ingresado en este padrón anexo.";
+                    }
+                    errorMsg.style.display = "block";
+                }
+
+                btnConsultar.disabled = false;
+                btnText.style.display = "inline";
+                btnSpinner.style.display = "none";
+
+            }, 1000); 
+        }
+
+        function cerrarModal() {
+            document.getElementById('resultModal').style.display = "none";
+        }
+
+        function nuevaConsulta() {
+            cerrarModal();
+            const inputDni = document.getElementById('dniInput');
+            inputDni.value = "";
+            inputDni.focus();
+        }
+
+        function imprimirConstancia() {
+            window.print();
+        }
+function descargarPDF() {
+            const elemento = document.getElementById('pdfContent');
+            const watermark = document.getElementById('pdfWatermark');
+            
+            watermark.style.display = "block";
+
+            const opciones = {
+                margin:       [12, 12, 12, 12],
+                filename:     'constancia-sisa-rte-art12-validada.pdf',
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true, letterRendering: true },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            html2pdf().from(elemento).set(opciones).save().then(() => {
+                watermark.style.display = "none";
+            });
+        }
+    </script>
+</body>
+</html>
