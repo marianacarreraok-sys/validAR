@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Certificado de Autenticidad y Validación | miBilletera</title>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Encode+Sans:wght@300;400;500;600;700;800&display=swap">
+<!-- Librería para exportar a PDF -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+<style>
+body {
+  font-family: 'Encode Sans', sans-serif;
+  margin: 0;
+  background: #edf2f7;
+  color: #2d3748;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.navbar {
+  background: #ffffff;
+  border-bottom: 3px solid #ffd100;
+  padding: 15px 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+.navbar img {
+  height: 42px;
+}
+
+.navbar-text {
+  font-size: 12px;
+  font-weight: 700;
+  color: #4a5568;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.header-portal {
+  background: linear-gradient(135deg, #0072bb 0%, #004080 100%);
+  color: #fff;
+  padding: 25px 20px;
+  text-align: center;
+}
+
+.header-portal h1 {
+  margin: 0 0 4px 0;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.header-portal p {
+  margin: 0;
+  font-size: 12px;
+  opacity: 0.9;
+}
+
+.container {
+  max-width: 680px;
+  margin: 20px auto;
+  padding: 0 15px;
+  flex: 1;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.certificate-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 25px 30px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+  border: 1px solid #cbd5e0;
+  position: relative;
+  box-sizing: border-box;
+}
+
+/* Sello de estado */
+.badge-status {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 15px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 13px;
+  margin-bottom: 18px;
+  text-transform: uppercase;
+}
+
+.badge-valid {
+  background: #f0fff4 !important;
+  color: #22543d;
+  border: 1px solid #c6f6d5;
+}
+
+.badge-valid .icon {
+  background: #38a169;
+  color: white;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+}
+
+.badge-error {
+  background: #fff5f5 !important;
+  color: #742a2a;
+  border: 1px solid #fed7d7;
+}
+
+.badge-error .icon {
+  background: #e53e3e;
+  color: white;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+}
+
+.section-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: #718096;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-bottom: 8px;
+  border-bottom: 2px solid #e2e8f0;
+  padding-bottom: 4px;
+}
+
+.details-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 7px 0;
+  border-bottom: 1px dashed #e2e8f0;
+  font-size: 13px;
+}
+
+.detail-label {
+  color: #4a5568;
+  font-weight: 600;
+}
+
+.detail-value {
+  color: #1a202c;
+  font-weight: 700;
+  text-align: right;
+}
+
+.security-box {
+  background: #f7fafc !important;
+  border-left: 4px solid #0072bb;
+  padding: 12px 15px;
+  border-radius: 6px;
+  font-size: 11px;
+  line-height: 1.4;
+  color: #2d3748;
+  margin-bottom: 0;
+}
+
+.btn-action {
+  display: block;
+  width: 100%;
+  background: #0072bb;
+  color: white;
+  text-align: center;
+  padding: 12px;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 14px;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-action:hover {
+  background: #005b96;
+}
+
+footer {
+  background: #1a202c;
+  color: #a0aec0;
+  text-align: center;
+  padding: 15px;
+  font-size: 11px;
+  margin-top: auto;
+  border-top: 4px solid #0072bb;
+}
+
+@media print {
+  body {
+    background: transparent;
+  }
+  .navbar, .header-portal, .btn-action, footer {
+    display: none !important;
+  }
+  .container {
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  .certificate-card {
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="navbar">
+  <img src="https://i.postimg.cc/638qB6NY/1776094869296.png" alt="Logo miBilletera">
+  <div class="navbar-text">Anexo Digital Oficial</div>
+</div>
+
+<div class="header-portal">
+  <h1>Constancia de Registro y Validez</h1>
+  <p>Sistema Centralizado de Autenticación Documental</p>
+</div>
+
+<div class="container">
+  <!-- Contenedor principal que se exportará a PDF -->
+  <div class="certificate-card" id="pdfContent">
+    
+    <!-- Contenedor dinámico del estado -->
+    <div id="badgeContainer" class="badge-status badge-valid">
+      <div class="icon" id="badgeIcon">✓</div>
+      <div>
+        <div style="font-size: 11px; opacity: 0.8;" id="badgeSubtitle">ESTADO DEL REGISTRO</div>
+        <div id="badgeTitle">DOCUMENTO OFICIAL VÁLIDO Y VIGENTE</div>
+      </div>
+    </div>
+
+    <div class="section-title">Información del Titular</div>
+    <div class="details-grid">
+      <div class="detail-row">
+        <span class="detail-label">Apellido y Nombres:</span>
+        <span class="detail-value" id="lblTitular">-</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Documento de Identidad:</span>
+        <span class="detail-value" id="lblDni">-</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Provincia:</span>
+        <span class="detail-value" id="lblProvincia">-</span>
+      </div>
+    </div>
+
+    <div class="section-title">Detalles Académicos</div>
+    <div class="details-grid">
+      <div class="detail-row">
+        <span class="detail-label">Tipo de Certificación:</span>
+        <span class="detail-value" id="lblTramite">-</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Tipo de Bachiller:</span>
+        <span class="detail-value" id="lblBachiller">-</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Año de Egreso:</span>
+        <span class="detail-value" id="lblEgreso">-</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Institución de Origen:</span>
+        <span class="detail-value" id="lblInstitucion">-</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Número de Serie:</span>
+        <span class="detail-value" id="lblSerie" style="color: #0072bb; font-family: monospace;">-</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Huella de Integridad (Hash):</span>
+        <span class="detail-value" id="lblHash" style="font-family: monospace; font-size: 11px; color: #4a5568;">-</span>
+      </div>
+      <div class="detail-row" style="border-bottom: none;">
+        <span class="detail-label">Fecha de Verificación:</span>
+        <span class="detail-value" id="lblFecha">-</span>
+      </div>
+    </div>
+
+    <div class="security-box" id="securityBox">
+      <strong>Validez Legal y Administrativa:</strong> Este documento electrónico cuenta con trazabilidad oficial sincronizada en los registros de <i>miBilletera</i>. Su autenticidad puede ser contrastada mediante la lectura del código QR impreso en el certificado original.
+    </div>
+  </div>
+
+  <button class="btn-action" onclick="descargarPDF()" style="margin-top: 20px;">Descargar Constancia en PDF</button>
+</div>
+
+<footer>
+  © 2026 miBilletera · Plataforma de Gestión Documental y Certificación Digital.
+</footer>
+
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const nombre = params.get('nombre');
+  const apellido = params.get('apellido');
+  const dni = params.get('dni');
+
+  // Fecha actual formateada
+  const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+  const fechaActual = new Date().toLocaleDateString('es-AR', options);
+  document.getElementById('lblFecha').innerText = fechaActual;
+
+  if (!nombre && !dni) {
+    // Vista de Error si entran sin datos
+    let badge = document.getElementById('badgeContainer');
+    badge.className = "badge-status badge-error";
+    document.getElementById('badgeIcon').innerText = "!";
+    document.getElementById('badgeSubtitle').innerText = "ADVERTENCIA DE SISTEMA";
+    document.getElementById('badgeTitle').innerText = "ENLACE DE VERIFICACIÓN INVÁLIDO";
+
+    document.getElementById('lblTitular').innerText = "Registro no encontrado";
+    document.getElementById('lblDni').innerText = "-";
+    document.getElementById('lblProvincia').innerText = "-";
+    document.getElementById('lblTramite').innerText = "-";
+    document.getElementById('lblBachiller').innerText = "-";
+    document.getElementById('lblEgreso').innerText = "-";
+    document.getElementById('lblInstitucion').innerText = "-";
+    document.getElementById('lblSerie').innerText = "ERR-DATOS";
+    document.getElementById('lblHash').innerText = "---";
+
+    document.getElementById('securityBox').style.borderLeftColor = "#e53e3e";
+    document.getElementById('securityBox').style.background = "#fff5f5";
+    document.getElementById('securityBox').innerHTML = "<strong>Atención:</strong> El enlace al que intenta acceder no posee los parámetros de seguridad requeridos. Compruebe que el código QR haya sido escaneado correctamente desde un documento oficial.";
+  } else {
+    // Vista Exitosa con los datos del URL
+    const numSerie = params.get('serie') || '632504/09';
+    document.getElementById('lblTitular').innerText = (apellido ? apellido.toUpperCase() + ', ' : '') + (nombre || '');
+    document.getElementById('lblDni').innerText = dni || 'No especificado';
+    document.getElementById('lblProvincia').innerText = params.get('provincia') || 'Buenos Aires';
+    document.getElementById('lblTramite').innerText = params.get('tramite') || 'Título Secundario / Certificación Oficial';
+    document.getElementById('lblBachiller').innerText = params.get('bachiller') || 'Bachiller en Economía y Administración';
+    document.getElementById('lblEgreso').innerText = params.get('egreso') || '2020';
+    document.getElementById('lblInstitucion').innerText = params.get('institucion') || 'Establecimiento Autorizado';
+    document.getElementById('lblSerie').innerText = numSerie;
+    
+    // Genera una huella hash simulada única basada en el número de serie
+    document.getElementById('lblHash').innerText = "SHA256: 7a8b9f..." + numSerie.toLowerCase().replace('/', '') + "e412";
+  }
+
+  // Configuración de html2pdf ajustada para renderizar en una sola página A4
+  function descargarPDF() {
+    const element = document.getElementById('pdfContent');
+    const opt = {
+      margin:       [8, 8, 8, 8],
+      filename:     'Constancia_miBilletera.pdf',
+      image:        { type: 'jpeg', quality: 0.98 },
+      html2canvas:  { 
+        scale: 2, 
+        useCORS: true, 
+        letterRendering: true,
+        scrollY: 0
+      },
+      jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    };
+    html2pdf().from(element).set(opt).save();
+  }
+</script>
+
+</body>
+  </html>
+
+  
