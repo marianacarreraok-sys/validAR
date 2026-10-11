@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificado de Estudios Final - UBA (Control Total)</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #e6e6e6;
+            margin: 0;
+            padding: 20px;
+            color: #000;
+        }
+        .barra-herramientas {
+            max-width: 900px;
+            margin: 0 auto 15px auto;
+            background: #2c3e50;
+            padding: 12px 20px;
+            border-radius: 6px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            gap: 15px;
+        }
+        .grupo-controles {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px;
+            font-size: 12px;
+        }
+        .control-item {
+            display: flex;
+            flex-direction: column;
+            background: #34495e;
+            padding: 5px 8px;
+            border-radius: 4px;
+            border: 1px dashed #fff;
+        }
+        .control-item label {
+            cursor: pointer;
+            font-weight: bold;
+            margin-bottom: 2px;
+        }
+        .control-item input[type="range"] {
+            cursor: pointer;
+            width: 90px;
+        }
+        .control-item input[type="file"] {
+            display: none;
+        }
+        .grupo-botones {
+            display: flex;
+            gap: 8px;
+        }
+        .barra-herramientas button {
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 13px;
+        }
+        .barra-herramientas button:hover {
+            background-color: #219653;
+        }
+        .btn-pdf {
+            background-color: #2980b9 !important;
+        }
+        .btn-pdf:hover {
+            background-color: #1f618d !important;
+        }
+        .btn-girar {
+            background-color: #e67e22 !important;
+            margin-top: 4px;
+        }
+        .btn-girar:hover {
+            background-color: #d35400 !important;
+        }
+        .certificado-wrapper {
+            position: relative;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .certificado-container {
+            font-family: 'Times New Roman', Times, serif;
+            background: #fff;
+            padding: 40px 90px 40px 50px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+            border: 1px solid #ccc;
+            position: relative;
+            overflow: hidden;
+            width: 900px;
+            min-width: 900px;
+            box-sizing: border-box;
+        }
+        .logo-container {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .logo-container img {
+            width: 120px;
+            height: auto;
+            object-fit: contain;
+        }
+        .imagen-lateral {
+            position: absolute;
+            top: 450px; 
+            right: 12px;
+            width: 75px;
+            text-align: center;
+            z-index: 10;
+        }
+        .imagen-lateral img {
+            width: 75px;
+            height: auto;
+            transition: transform 0.3s ease;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .header h2 {
+            margin: 5px 0;
+            font-size: 18px;
+            letter-spacing: 1px;
+        }
+        .header h3 {
+            margin: 5px 0;
+            font-size: 14px;
+            font-weight: normal;
+        }
+        .texto-principal {
+            font-size: 13px;
+            text-align: justify;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+        .curso-titulo {
+            font-weight: bold;
+            background-color: #e9e9e9;
+            padding: 5px;
+            margin-top: 15px;
+            margin-bottom: 5px;
+            font-size: 12px;
+            text-align: center;
+            border-top: 1px solid #000;
+            border-bottom: 1px solid #000;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 11px;
+            margin-bottom: 10px;
+        }
+        th, td {
+            border: 1px solid #999;
+            padding: 4px 6px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            text-align: center;
+        }
+        .promedio {
+            text-align: right;
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        [contenteditable="true"]:hover {
+            outline: 1px dashed #3498db;
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+
+<div class="barra-herramientas">
+    <div class="grupo-controles">
+        <div class="control-item">
+            <label for="subirLogo">📁 Logo Superior</label>
+            <input type="file" id="subirLogo" accept="image/*" onchange="cargarImagen(event, 'logoSuperior')">
+            <div>Ancho: <input type="range" min="30" max="300" value="120" oninput="cambiarEstilo('logoSuperior', 'width', this.value + 'px')"></div>
+        </div>
+        
+        <div class="control-item">
+            <label for="subirSello">📁 Sello Margen</label>
+            <input type="file" id="subirSello" accept="image/*" onchange="cargarImagen(event, 'imagenLateralImg')">
+            <div>Ancho: <input type="range" min="30" max="200" value="75" oninput="cambiarEstilo('imagenLateralImg', 'width', this.value + 'px')"></div>
+            <div style="margin-top:2px;">Altura (Top): <input type="range" min="50" max="1200" value="450" oninput="cambiarEstilo('bloqueSelloLateral', 'top', this.value + 'px')"></div>
+            <div style="margin-top:2px;">Margen Der.: <input type="range" min="-20" max="100" value="12" oninput="cambiarEstilo('bloqueSelloLateral', 'right', this.value + 'px')"></div>
+            <button class="btn-girar" onclick="girarImagenLateral()">🔄 Girar 90°</button>
+        </div>
+    </div>
+
+    <div class="grupo-botones">
+        <button onclick="descargarPNG()">Descargar PNG</button>
+        <button class="btn-pdf" onclick="descargarPDF()">Descargar PDF</button>
+    </div>
+</div>
+
+<div class="certificado-wrapper">
+    <div class="certificado-container" id="captura-area">
+        
+        <div class="logo-container">
+            <img id="logoSuperior" src="https://upload.wikimedia.org/wikipedia/commons/e/e3/Escudo_de_la_Universidad_de_Buenos_Aires.svg" alt="Logo UBA">
+        </div>
+
+        <div class="imagen-lateral" id="bloqueSelloLateral">
+            <img id="imagenLateralImg" src="https://i.imgur.com/7A26W6G.png" alt="Sello lateral" style="transform: rotate(90deg);">
+        </div>
+
+        <div class="header">
+            <h2 contenteditable="true">UNIVERSIDAD DE BUENOS AIRES</h2>
+            <h3 contenteditable="true">CERTIFICADO DE ESTUDIOS FINAL</h3>
+        </div>
+
+        <div class="texto-principal" contenteditable="true">
+    Por el presente certifico que <b>GIL, MIRIAM NOEMI</b>, DNI <b>18.048.851</b> ha aprobado en esta institución las exigencias académicas correspondientes a la carrera de <b>PSICOLOGÍA POSITIVA DIGITAL</b> (Duración: 4 años - Carga horaria total aproximada: 450 horas) que a continuación se detallan, habiendo finalizado sus estudios el 09/04/2025 y obteniendo las siguientes calificaciones definitivas.
+</div>
+
+<div class="curso-titulo" contenteditable="true">PRIMER AÑO &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; CURSO: aprobado</div>
+<table>
+    <tr>
+        <th>ASIGNATURA / MÓDULO</th>
+        <th>CALIFICACIÓN</th>
+        <th>TIPO</th>
+        <th>LIBRO</th>
+        <th>ACTA</th>
+        <th>FOLIO</th>
+        <th>FECHA</th>
+    </tr>
+    <tr><td contenteditable="true">INTRODUCCIÓN A LA PSICOLOGÍA POSITIVA</td><td contenteditable="true">APROBADO 9/NUEVE</td><td contenteditable="true">EXAMEN</td><td contenteditable="true">9701</td><td contenteditable="true">2100/20</td><td contenteditable="true">60701</td><td contenteditable="true">04/12/2022</td></tr>
+    <tr><td contenteditable="true">BASES NEUROBIOLÓGICAS DEL BIENESTAR</td><td contenteditable="true">APROBADO 8/OCHO</td><td contenteditable="true">EXAMEN</td><td contenteditable="true">9702</td><td contenteditable="true">2100/20</td><td contenteditable="true">60701</td><td contenteditable="true">10/12/2022</td></tr>
+    <tr><td contenteditable="true">EMOCIONES POSITIVAS Y RESILIENCIA</td><td contenteditable="true">APROBADO 9/NUEVE</td><td contenteditable="true">EXAMEN</td><td contenteditable="true">9703</td><td contenteditable="true">2100/20</td><td contenteditable="true">60701</td><td contenteditable="true">16/12/2022</td></tr>
+    <tr><td contenteditable="true">HERRAMIENTAS DIGITALES PARA LA SALUD MENTAL</td><td contenteditable="true">APROBADO 8/OCHO</td><td contenteditable="true">EXAMEN</td><td contenteditable="true">9704</td><td contenteditable="true">2100/20</td><td contenteditable="true">60701</td><td contenteditable="true">21/12/2022</td></tr>
+</table>
+<div class="promedio" contenteditable="true">PROMEDIO: 8,50 (OCHO 50)</div>
+
+<div class="curso-titulo" contenteditable="true">SEGUNDO AÑO &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; CURSO: aprobado</div>
+<table>
+    <tr>
+        <th>ASIGNATURA / MÓDULO</th>
+        <th>CALIFICACIÓN</th>
+        <th>TIPO</th>
+        <th>LIBRO</th>
+        <th>ACTA</th>
+        <th>FOLIO</th>
+        <th>FECHA</th>
+    </tr>
+    <tr><td contenteditable="true">FORTALEZAS Y VIRTUDES HUMANAS (VIA)</td><td contenteditable="true">APROBADO 9/NUEVE</td><td contenteditable="true">EXAMEN</td><td contenteditable="true">9720</td><td contenteditable="true">2100/20</td><td contenteditable="true">60702</td><td contenteditable="true">05/12/2023</td></tr>
+    <tr><td contenteditable="true">MINDFULNESS Y REGULACIÓN EMOCIONAL</td><td contenteditable="true">APROBADO 8/OCHO</td><td contenteditable="true">EXAMEN</td><td contenteditable="true">9721</td><td contenteditable="true">2100/20</td><td contenteditable="true">60702</td><td contenteditable="true">11/12/2023</td></tr>
+    <tr><td contenteditable="true">PSICOLOGÍA ONLINE Y ÉTICA DIGITAL</td><td contenteditable="true">APROBADO 9/NUEVE</td><td contenteditable="true">EXAMEN</td><td contenteditable="true">9722</td><td contenteditable="true">2100/20</td><td contenteditable="true">60702</td><td contenteditable="true">17/12/2023</td></tr>
+    <tr><td contenteditable="true">INVESTIGACIÓN EN PSICOLOGÍA POSITIVA</td><td contenteditable="true">APROBADO 8/OCHO</td><td contenteditable="true">EXAMEN</td><td contenteditable="true">9723</td><td contenteditable="true">2100/20</td><td contenteditable="true">60702</td><td contenteditable="true">22/12/2023</td></tr>
+</table>
+<div class="promedio" contenteditable="true">PROMEDIO: 8,50 (OCHO 50)</div>
+
+<div class="curso-titulo" contenteditable="true">TERCER AÑO &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; CURSO: aprobado</div>
+<table>
+    <tr>
+        <th>ASIGNATURA / MÓDULO</th>
+        <th>CALIFICACIÓN</th>
+        <th>TIPO</th>
+        <th>LIBRO</th>
+        <th>ACTA</th>
+        <th>FOLIO</th>
+        <th>FECHA</th>
+    </tr>
+    <tr><td contenteditable="true">PSICOLOGÍA POSITIVA APLICADA AL TRABAJO Y ORGANIZACIONES</td><td contenteditable="true">APROBADO 10/DIEZ</td><td contenteditable="true">EXAMEN</td><td contenteditable="true">9740</td><td contenteditable="true">2100/20</td><td contenteditable="true">60703</td><td contenteditable="true">04/12/2024</td></tr>
+    <tr><td contenteditable="true">COACHING Y LIDERAZGO POSITIVO VIRTUAL</td><td contenteditable="true">APROBADO 9/NUEVE</td><td contenteditable="true">EXAMEN</td><td contenteditable="true">9741</td><td contenteditable="true">2100/20</td><td contenteditable="true">60703</td><td contenteditable="true">10/12/2024</td></tr>
+    <tr><td contenteditable="true">INTERVENCIONES DIGITALES PARA EL FLORECIMIENTO HUMANO</td><td contenteditable="true">APROBADO 9/NUEVE</td><td contenteditable="true">EXAMEN</td><td contenteditable="true">9742</td><td contenteditable="true">2100/20</td><td contenteditable="true">60703</td><td contenteditable="true">16/12/2024</td></tr>
+    <tr><td contenteditable="true">SEMINARIO DE TECNOLOGÍAS EMERGENTES EN SALUD</td><td contenteditable="true">APROBADO 10/DIEZ</td><td contenteditable="true">EXAMEN</td><td contenteditable="true">9743</td><td contenteditable="true">2100/20</td><td contenteditable="true">60703</td><td contenteditable="true">22/12/2024</td></tr>
+</table>
+<div class="promedio" contenteditable="true">PROMEDIO: 9,50 (NUEVE 50)</div>
+
+<div class="curso-titulo" contenteditable="true">CUARTO AÑO &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; CURSO: aprobado</div>
+<table>
+    <tr>
+        <th>ASIGNATURA / MÓDULO</th>
+        <th>CALIFICACIÓN</th>
+        <th>TIPO</th>
+        <th>LIBRO</th>
+        <th>ACTA</th>
+        <th>FOLIO</th>
+        <th>FECHA</th>
+    </tr>
+    <tr><td contenteditable="true">PRÁCTICA PROFESIONAL SUPERVISADA EN ENTORNO VIRTUAL</td><td contenteditable="true">APROBADO 10/DIEZ</td><td contenteditable="true">EXAMEN</td><td contenteditable="true">9750</td><td contenteditable="true">2100/20</td><td contenteditable="true">60704</td><td contenteditable="true">15/03/2025</td></tr>
+    <tr><td contenteditable="true">TRABAJO FINAL / TESINA DE CARRERA</td><td contenteditable="true">APROBADO 10/DIEZ</td><td contenteditable="true">EXAMEN</td><td contenteditable="true">9751</td><td contenteditable="true">2100/20</td><td contenteditable="true">60704</td><td contenteditable="true">09/04/2025</td></tr>
+</table>
+<div class="promedio" contenteditable="true">PROMEDIO GENERAL: 9,00 (NUEVE)</div>
+
+</div>
+</div>
+
+<script>
+    let anguloActual = 90;
+
+    function cargarImagen(event, idElemento) {
+        const archivo = event.target.files[0];
+        if (archivo) {
+            const lector = new FileReader();
+            lector.onload = function(e) {
+                document.getElementById(idElemento).src = e.target.result;
+            }
+            lector.readAsDataURL(archivo);
+        }
+    }
+
+    function cambiarEstilo(idElemento, propiedad, valor) {
+        document.getElementById(idElemento).style[propiedad] = valor;
+    }
+
+    function girarImagenLateral() {
+        anguloActual = (anguloActual + 90) % 360;
+        document.getElementById('imagenLateralImg').style.transform = `rotate(${anguloActual}deg)`;
+    }
+
+    function descargarPNG() {
+        const elemento = document.getElementById('captura-area');
+        html2canvas(elemento, { 
+            scale: 2, 
+            useCORS: true,
+            width: 900,
+            windowWidth: 900
+        }).then(canvas => {
+            const enlace = document.createElement('a');
+            enlace.download = 'certificado_analitico.png';
+            enlace.href = canvas.toDataURL('image/png');
+            enlace.click();
+        });
+    }
+
+    function descargarPDF() {
+        const elemento = document.getElementById('captura-area');
+        html2canvas(elemento, { 
+            scale: 2, 
+            useCORS: true,
+            width: 900,
+            windowWidth: 900
+        }).then(canvas => {
+            const imgData = canvas.toDataURL('image/png');
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF('p', 'mm', 'a4');
+            
+            const pageWidth = pdf.internal.pageSize.getWidth();
+            const pageHeight = pdf.internal.pageSize.getHeight();
+            
+            const imgWidth = pageWidth;
+            const imgHeight = (canvas.height * imgWidth) / canvas.width;
+            
+            let heightLeft = imgHeight;
+            let position = 0;
+
+            pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+            heightLeft -= pageHeight;
+
+            while (heightLeft > 0) {
+                position = heightLeft - imgHeight;
+                pdf.addPage();
+                pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                heightLeft -= pageHeight;
+            }
+
+            pdf.save('certificado_analitico.pdf');
+        });
+    }
+</script>
+
+</body>
+                </html>
+
+  
