@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SISA-RTE | Consulta Oficial de Registro, Títulos y Trayectorias</title>
+
+<!-- Librería para generar y descargar el PDF desde la ficha -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Encode+Sans:wght@100;200;300;400;500;600;700;800;900&display=swap">
+
+<style>
+/* LOADER ESTILIZADO */
+#loader-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid #eef6fc;
+  border-top: 5px solid #0072bb;
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+  margin-bottom: 16px;
+}
+
+.loader-text {
+  font-family: 'Encode Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: #0072bb;
+  letter-spacing: 0.5px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+body{
+  font-family:'Encode Sans',sans-serif;
+  margin:0;
+  background:#f9f9f9;
+  color:#222;
+}
+
+/* NAVBAR Y MENÚ HAMBURGUESA */
+.navbar{
+  background:#fff;
+  border-bottom:3px solid #ffd100;
+  padding:12px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+}
+
+.navbar img{
+  height:45px;
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.btn-login-nav {
+  background: #0072bb;
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 14px;
+  transition: 0.2s;
+}
+
+.btn-login-nav:hover {
+  background: #005a96;
+}
+
+.menu-toggle {
+  background: none;
+  border: none;
+  font-size: 26px;
+  cursor: pointer;
+  color: #333;
+  padding: 5px;
+}
+
+/* MENÚ DESPLEGABLE */
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: 20px;
+  background: #fff;
+  width: 300px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+  border-radius: 8px;
+  border: 1px solid #eaeaea;
+  z-index: 1000;
+  overflow: hidden;
+}
+
+.dropdown-menu.active {
+  display: block;
+}
+
+.dropdown-menu a {
+  display: block;
+  padding: 12px 18px;
+  color: #333;
+  text-decoration: none;
+  font-size: 14px;
+  border-bottom: 1px solid #f1f1f1;
+  transition: 0.2s;
+  cursor: pointer;
+}
+
+.dropdown-menu a:hover {
+  background: #eef6fc;
+  color: #0072bb;
+}
+
+.header{
+  background: linear-gradient(135deg, #002746 0%, #005a96 100%);
+  color:#fff;
+  padding:40px 20px;
+  text-align:center;
+}
+
+.header h1{
+  margin:0 0 10px 0;
+  font-size:34px;
+  font-weight: 700;
+}
+
+.header p{
+  margin:0;
+  font-size:17px;
+  opacity: 0.95;
+}
+
+.container{
+  max-width:950px;
+  margin:auto;
+  padding:20px;
+}
+
+/* BANNER INSTITUCIONAL */
+.banner-secretaria {
+  background: linear-gradient(135deg, #eafaf1 0%, #d4efdf 100%);
+  border: 2px solid #2ecc71;
+  border-radius: 12px;
+  padding: 25px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.banner-secretaria h2 {
+  color: #1e7e34;
+  margin-top: 0;
+  font-size: 22px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.banner-secretaria p {
+  color: #2c3e50;
+  font-size: 15px;
+  line-height: 1.6;
+  margin-bottom: 15px;
+}
+
+.autoridades-box {
+  background: rgba(255, 255, 255, 0.7);
+  border-left: 4px solid #2ecc71;
+  padding: 12px 15px;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #2c3e50;
+  line-height: 1.6;
+}
+
+.card{
+  background:#fff;
+  border-radius:12px;
+  padding:25px;
+  margin-bottom:24px;
+  box-shadow:0 4px 15px rgba(0,0,0,0.05);
+  border: 1px solid #eaeaea;
+}
+
+.card h2{
+  margin-top:0;
+  color:#002746;
+  font-size: 22px;
+}
+
+.search-group {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+  margin-bottom: 15px;
+}
+
+input[type="text"] {
+  flex: 1;
+  padding: 12px 14px;
+  border: 1px solid #dcdcdc;
+  border-radius: 6px;
+  font-size: 15px;
+  outline: none;
+  font-family: inherit;
+}
+
+input[type="text"]:focus {
+  border-color: #0072bb;
+  box-shadow: 0 0 0 3px rgba(0, 114, 187, 0.15);
+}
+
+.btn-search {
+  padding: 12px 24px;
+  background-color: #0072bb;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14.5px;
+  font-weight: 600;
+  font-family: inherit;
+  transition: background 0.2s;
+}
+
+.btn-search:hover {
+  background-color: #005a96;
+}
+
+.msg-error {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+  padding: 12px;
+  border-radius: 6px;
+  font-size: 13.5px;
+  display: none;
+  margin-top: 15px;
+}
+
+/* FICHA DE RESULTADOS DINÁMICA (URL) */
+.ficha-resultado {
+  display: none;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 30px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  border: 1px solid #eaeaea;
+}
+
+.data-row {
+  display: flex;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #f1f1f1;
+  font-size: 14px;
+}
+
+.data-row:last-child {
+  border-bottom: none;
+}
+
+.data-row strong {
+  width: 200px;
+  color: #002746;
+  font-weight: 600;
+}
+
+.data-row span {
+  flex: 1;
+  color: #333;
+}
+
+.badge-official {
+  background-color: #2ecc71;
+  color: white;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.badge-inactive {
+  background-color: #d9534f;
+  color: white;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.btn-view-credential {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #eef6fc;
+  color: #0072bb;
+  border: 1px solid #b6d4fe;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.btn-view-credential:hover {
+  background-color: #d5e6f8;
+}
+
+.verification-box {
+  margin-top: 20px;
+  background-color: #f8fbfe;
+  border: 1px dashed #0072bb;
+  padding: 15px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.qr-container img {
+  width: 80px;
+  height: 80px;
+  display: block;
+  border: 1px solid #ddd;
+  background: #fff;
+  padding: 2px;
+}
+
+.qr-info {
+  font-size: 12px;
+  color: #555;
+  line-height: 1.5;
+}
+
+.qr-info strong {
+  color: #002746;
+  display: block;
+  margin-bottom: 3px;
+  font-size: 13px;
+}
+
+.ficha-actions {
+  margin-top: 25px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.btn-accion {
+  padding: 12px 20px;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+  color: white;
+}
+
+.btn-pdf-accion { background-color: #d9534f; }
+.btn-pdf-accion:hover { background-color: #c9302c; }
+
+.btn-print-accion { background-color: #0072bb; }
+.btn-print-accion:hover { background-color: #005a96; }
+
+.faq-item {
+  border-bottom: 1px solid #eaeaea;
+  padding: 15px 0;
+}
+
+.faq-item:last-child {
+  border-bottom: none;
+}
+
+.faq-question {
+  font-weight: 700;
+  color: #2c3e50;
+  font-size: 16px;
+}
+
+.faq-answer {
+  font-size: 14px;
+  color: #555;
+  margin-top: 10px;
+  line-height: 1.6;
+}
+
+.security-banner {
+  background: #fdfefe;
+  border: 1px solid #dcdcdc;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #333;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+footer{
+  background:#111;
+  color: #bbb;
+  padding:40px 20px;
+  margin-top:60px;
+  font-size:14px;
+}
+
+.footer-content {
+  max-width: 950px;
+  margin: auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.footer-links a {
+  color: #fff;
+  text-decoration: none;
+  margin-right: 15px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.footer-links a:hover {
+  text-decoration: underline;
+}
+
+.small{
+  font-size:12px;
+  color:#888;
+  margin-top: 15px;
+}
+
+/* MODALES */
+.modal-overlay {
+  display: flex;
+  opacity: 0;
+  visibility: hidden;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 10000;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  box-sizing: border-box;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.modal-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal-content {
+  background: #fff;
+  width: 100%;
+  max-width: 600px;
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+  position: relative;
+  max-height: 90vh;
+  overflow-y: auto;
+  transform: translateY(20px);
+  transition: transform 0.3s ease;
+}
+
+.modal-overlay.active .modal-content {
+  transform: translateY(0);
+}
+
+.close-modal {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 24px;
+  font-weight: bold;
+  color: #888;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.close-modal:hover {
+  color: #111;
+}
+
+@media (max-width: 768px) {
+  .navbar { padding: 10px 15px; }
+  .navbar img { height: 38px; }
+  .header { padding: 30px 15px; }
+  .header h1 { font-size: 26px; }
+  .container { padding: 15px; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- LOADER -->
+<div id="loader-overlay">
+  <div class="spinner"></div>
+  <div class="loader-text">Procesando credencial SISA-RTE...</div>
+</div>
+
+<div class="navbar">
+  <img src="https://i.postimg.cc/PrCh5GC5/489641.png" alt="Logo SISA-RTE">
+  
+  <div class="nav-right">
+    <a href="login.html" class="btn-login-nav">Área Profesional</a>
+    <button class="menu-toggle" id="menu-toggle-btn">&#9776;</button>
+  </div>
+
+  <div class="dropdown-menu" id="dropdown-menu">
+    <a href="login.html">Área Profesional</a>
+    <a id="menu-qr">Cómo Verificar Códigos QR</a>
+    <a id="menu-validez">Validez de la Documentación</a>
+    <a id="menu-mas-info">Más Información</a>
+    <a id="menu-soporte">Soporte Técnico</a>
+  </div>
+</div>
+
+<div class="header">
+  <h1>SISA-RTE</h1>
+  <p>Registro, Títulos y Trayectorias Profesionales del ámbito de la Salud.</p>
+</div>
+
+<div class="container">
+
+  <div class="security-banner">
+    <span>🛡️</span>
+    <div>
+      <strong>Verificación Dinámica por URL:</strong> Estándares de seguridad avanzada y control de firmas digitales para el ejercicio profesional.
+    </div>
+  </div>
+
+  <!-- SECCIÓN DE RESULTADOS DINÁMICA (SE LLENA CON LOS DATOS DE LA URL) -->
+  <div id="fichaResultado" class="ficha-resultado">
+    <div id="pdfContent">
+      <div style="text-align: center; margin-bottom: 15px; display: none;" id="pdfWatermark">
+        <strong style="color: #002746; font-size: 15px;">CONSTANCIA OFICIAL DE REGISTRO Y TRAYECTORIA - SISA-RTE</strong>
+        <hr style="border: 0; border-top: 1px solid #ccc; margin-top: 8px;">
+      </div>
+
+      <h2 style="color: #002746; margin-top: 0; font-size: 22px;">Ficha Oficial de Registro SISA-RTE</h2>
+      <p style="color: #555; font-size: 14px; margin-bottom: 20px;">Credencial validada exitosamente mediante parámetro seguro en línea.</p>
+
+      <div class="data-row"><strong>Apellido y Nombres:</strong> <span id="resNombre">-</span></div>
+      <div class="data-row"><strong>Documento (DNI):</strong> <span id="resDni">-</span></div>
+      <div class="data-row"><strong>Título / Especialidad:</strong> <span id="resTitulo">-</span></div>
+      <div class="data-row"><strong>Acceso a Legajo (Drive):</strong> <span><a href="#" id="resLinkDrive" target="_blank" class="btn-view-credential">Ver Archivo PDF Respaldo</a></span></div>
+      <div class="data-row"><strong>Matrícula / Registro Único:</strong> <span id="resMatricula">-</span></div>
+      <div class="data-row"><strong>Jurisdicción de Emisión:</strong> <span id="resJurisdiccion">-</span></div>
+      <div class="data-row"><strong>Organismo de Origen:</strong> <span id="resOrganismo">-</span></div>
+      <div class="data-row"><strong>Marco Legal / Vía:</strong> <span id="resExpediente">-</span></div>
+      <div class="data-row"><strong>Estado de Habilitación:</strong> <span id="resEstadoContainer">-</span></div>
+      <div class="data-row"><strong>Fecha y Hora de Consulta:</strong> <span id="resTimestamp">-</span></div>
+      <div class="data-row"><strong>Código Hash Seguro:</strong> <span id="resHash" style="font-family: monospace; font-size: 12px; color: #555;">-</span></div>
+
+      <div class="verification-box">
+        <div class="qr-container">
+          <img id="qrImage" src="" alt="Código QR de Verificación SISA-RTE">
+        </div>
+        <div class="qr-info">
+          <strong>VALIDACIÓN ELECTRÓNICA OFICIAL</strong>
+          Este documento cuenta con validez federal y su autenticidad fue confirmada mediante pasarela de control SISA-RTE.
+        </div>
+      </div>
+    </div>
+
+    <div class="ficha-actions">
+      <button class="btn-accion btn-pdf-accion" onclick="descargarPDF()">Descargar Constancia PDF</button>
+      <button class="btn-accion btn-print-accion" onclick="window.print()">Imprimir Constancia</button>
+    </div>
+  </div>
+
+  <!-- PORTAL INSTITUCIONAL (SE MUESTRA POR DEFECTO SI LA URL NO TRAE DATOS) -->
+  <div id="portalPrincipalContainer">
+    
+    <div class="card">
+      <h2>Consulta de Registro y Trayectorias Profesionales</h2>
+      <p>Para verificar el estado de habilitación, ingrese mediante un enlace QR oficial provisto por el sistema o utilice la pasarela de consulta directa.</p>
+      <div style="background-color: #eef6fc; border-left: 4px solid #0072bb; padding: 14px; border-radius: 4px; font-size: 13.5px; color: #084298;">
+        <strong>Modo de Uso por URL:</strong> Añada los parámetros necesarios en la dirección web (ej: <code>?nombre=Pérez, Juan&dni=30123456&titulo=Médico&estado=ACTIVO</code>) para generar la ficha de validación de forma instantánea.
+      </div>
+    </div>
+
+    <div class="banner-secretaria">
+      <h2>Marco Normativo y Regularización Excepcional</h2>
+      <p>
+        <strong>SISA-RTE</strong> opera bajo directivas ministeriales para la integración de registros y la validación de trayectorias formativas y expedientes de excepción en el ámbito de la salud de la República Argentina.
+      </p>
+      <div class="autoridades-box">
+        <strong>Ámbito institucional:</strong> Ministerio de Salud de la Nación.<br>
+        <strong>Marco Legal de Referencia:</strong> Leyes de ejercicio profesional y normativas federales de fiscalización sanitaria.
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Preguntas Frecuentes (FAQ)</h2>
+      <div class="faq-item">
+        <div class="faq-question">¿Cómo funciona la lectura de parámetros por URL?</div>
+        <div class="faq-answer">El sistema interpreta automáticamente la información enviada en la dirección web por el código QR para armar el certificado digital individual sin necesidad de bases de datos internas.</div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<footer>
+  <div class="footer-content">
+    <div>
+      <p><strong>SISA-RTE | Registro de Trayectorias</strong></p>
+      <p class="small">Sistema Integrado de Información Sanitaria Argentino.</p>
+    </div>
+    <div class="footer-links">
+      <p>
+        <a id="footer-terminos">Términos y Condiciones</a>
+        <a id="footer-privacidad">Políticas de Privacidad</a>
+        <a id="footer-soporte">Soporte Técnico</a>
+      </p>
+      <p class="small">
+        © 2026 SISA-RTE. Todos los derechos reservados.
+      </p>
+    </div>
+  </div>
+</footer>
+
+<!-- MODALES -->
+<div id="modal-qr" class="modal-overlay">
+  <div class="modal-content">
+    <button class="close-modal" data-modal="modal-qr">&times;</button>
+    <h3>Cómo Verificar Códigos QR</h3>
+    <p>Cada credencial cuenta con un enlace embebido que transmite los datos de identificación directamente a esta pasarela web para su lectura dinámica.</p>
+  </div>
+</div>
+
+<div id="modal-validez" class="modal-overlay">
+  <div class="modal-content">
+    <button class="close-modal" data-modal="modal-validez">&times;</button>
+    <h3>Validez de la Documentación</h3>
+    <p>La documentación gestionada cuenta con validez legal federal basada en cotejos directos contra registros oficiales sanitarios.</p>
+  </div>
+</div>
+
+<div id="modal-mas-info" class="modal-overlay">
+  <div class="modal-content">
+    <button class="close-modal" data-modal="modal-mas-info">&times;</button>
+    <h3>Más Información sobre SISA-RTE</h3>
+    <p>Módulo integrado del Sistema Integrado de Información Sanitaria Argentino para la transparencia y seguridad de trayectorias sanitarias.</p>
+  </div>
+</div>
+
+<div id="modal-soporte" class="modal-overlay">
+  <div class="modal-content">
+    <button class="close-modal" data-modal="modal-soporte">&times;</button>
+    <h3>Soporte Técnico y Ayuda</h3>
+    <p>Línea exclusiva para consultas: <strong>0800-333-SISA (7472)</strong> o vía correo a <strong>soporte.sisa@salud.gob.ar</strong>.</p>
+  </div>
+</div>
+
+<div id="modal-privacidad" class="modal-overlay">
+  <div class="modal-content">
+    <button class="close-modal" data-modal="modal-privacidad">&times;</button>
+    <h3>Políticas de Privacidad</h3>
+    <p>Cumplimiento estricto de las normativas de protección integral de datos personales aplicadas a padrones sanitarios oficiales.</p>
+  </div>
+</div>
+
+<div id="modal-terminos" class="modal-overlay">
+  <div class="modal-content">
+    <button class="close-modal" data-modal="modal-terminos">&times;</button>
+    <h3>Términos y Condiciones</h3>
+    <p>El uso de este sistema implica la aceptación de los protocolos de control y validación de credenciales sanitarias.</p>
+  </div>
+</div>
+
+<script>
+  // Ocultar el loader al cargar la página
+  function ocultarLoader() {
+    const loader = document.getElementById('loader-overlay');
+    if (loader && loader.style.visibility !== 'hidden') {
+      loader.style.opacity = '0';
+      setTimeout(() => { loader.style.visibility = 'hidden'; }, 400);
+    }
+  }
+
+  window.addEventListener('load', () => {
+    ocultarLoader();
+
+    // Capturar parámetros directamente de la URL
+    const params = new URLSearchParams(window.location.search);
+    const nombre = params.get('nombre');
+    const dni = params.get('dni');
+
+    // Si la URL contiene al menos el nombre o el DNI, armamos la ficha dinámica
+    if (nombre || dni) {
+      document.getElementById('resNombre').innerText = nombre || "No especificado";
+      document.getElementById('resDni').innerText = dni || "No especificado";
+      document.getElementById('resTitulo').innerText = params.get('titulo') || "Título Registrado";
+      
+      const driveLink = params.get('drive');
+      const linkDriveBtn = document.getElementById('resLinkDrive');
+      if (driveLink && driveLink.startsWith('http')) {
+        linkDriveBtn.href = driveLink;
+        linkDriveBtn.style.display = "inline-flex";
+      } else {
+        linkDriveBtn.parentElement.parentElement.style.display = "none";
+      }
+
+      document.getElementById('resMatricula').innerText = params.get('matricula') || "M.N. / Registro Oficial";
+      document.getElementById('resJurisdiccion').innerText = params.get('jurisdiccion') || "República Argentina";
+      document.getElementById('resOrganismo').innerText = params.get('organismo') || "Ministerio de Salud de la Nación";
+      document.getElementById('resExpediente').innerText = params.get('expediente') || "Registro por Sistema SISA-RTE";
+      
+      const estado = (params.get('estado') || "ACTIVO").toUpperCase();
+      const estadoContainer = document.getElementById('resEstadoContainer');
+      if (estado === "ACTIVO" || estado === "VALIDO") {
+        estadoContainer.innerHTML = '<span class="badge-official">Activo / Válido (SISA-RTE)</span>';
+      } else {
+        estadoContainer.innerHTML = '<span class="badge-inactive">Inactivo / Suspendido</span>';
+      }
+
+      const hash = params.get('hash') || "SISA-RTE-2026-VERIFICADO";
+      document.getElementById('resHash').innerText = hash;
+
+      // Fecha y hora actual de lectura del QR
+      const ahora = new Date();
+      document.getElementById('resTimestamp').innerText = ahora.toLocaleDateString('es-AR') + ' a las ' + ahora.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' }) + ' hs';
+      
+      // Generación automática del código QR basado en la propia URL de validación actual
+      const qrImage = document.getElementById('qrImage');
+      const urlActual = window.location.href;
+      qrImage.src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(urlActual)}`;
+
+      // Ocultar el portal principal y mostrar la ficha con los datos de la URL
+      document.getElementById('portalPrincipalContainer').style.display = 'none';
+      document.getElementById('fichaResultado').style.display = 'block';
+    }
+  });
+
+  function descargarPDF() {
+    const elemento = document.getElementById('pdfContent');
+    const watermark = document.getElementById('pdfWatermark');
+    watermark.style.display = "block";
+
+    const opciones = {
+      margin:       [12, 12, 12, 12],
+      filename:     'constancia-sisa-rte-validada.pdf',
+      image:        { type: 'jpeg', quality: 0.98 },
+      html2canvas:  { scale: 2, useCORS: true, letterRendering: true },
+      jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    };
+
+    html2pdf().from(elemento).set(opciones).save().then(() => {
+      watermark.style.display = "none";
+    });
+  }
+
+  // Toggle del menú desplegable hamburguesa
+  const menuToggleBtn = document.getElementById('menu-toggle-btn');
+  const dropdownMenu = document.getElementById('dropdown-menu');
+
+  menuToggleBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    dropdownMenu.classList.toggle('active');
+  });
+
+  window.addEventListener('click', () => {
+    if (dropdownMenu.classList.contains('active')) {
+      dropdownMenu.classList.remove('active');
+    }
+  });
+
+  dropdownMenu.addEventListener('click', (e) => {
+    e.stopPropagation();
+  });
+
+  // Lógica de modales
+  const abrirModal = (id) => { 
+    dropdownMenu.classList.remove('active');
+    document.getElementById(id).classList.add('active'); 
+  };
+  
+  const cerrarModal = (id) => { 
+    document.getElementById(id).classList.remove('active'); 
+  };
+
+  document.getElementById('menu-qr').addEventListener('click', () => abrirModal('modal-qr'));
+  document.getElementById('menu-validez').addEventListener('click', () => abrirModal('modal-validez'));
+  document.getElementById('menu-mas-info').addEventListener('click', () => abrirModal('modal-mas-info'));
+  document.getElementById('menu-soporte').addEventListener('click', () => abrirModal('modal-soporte'));
+  
+  document.getElementById('footer-privacidad').addEventListener('click', () => abrirModal('modal-privacidad'));
+  document.getElementById('footer-terminos').addEventListener('click', () => abrirModal('modal-terminos'));
+  document.getElementById('footer-soporte').addEventListener('click', () => abrirModal('modal-soporte'));
+
+  document.querySelectorAll('.close-modal').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const modalId = e.target.getAttribute('data-modal');
+      cerrarModal(modalId);
+    });
+  });
+
+  window.addEventListener('click', (e) => {
+    if (e.target.classList.contains('modal-overlay')) {
+      e.target.classList.remove('active');
+    }
+  });
+</script>
+
+</body>
+</html>
