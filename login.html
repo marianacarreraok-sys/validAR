@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="es">
+<head> 
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ValidAR | miArgentina</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Encode+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<meta name="theme-color" content="#0072bb">
+
+<style>
+body {
+  margin: 0;
+  font-family: 'Encode Sans', sans-serif;
+  background: #f9f9f9;
+  color: #222;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+* { box-sizing: border-box; }
+
+/* NAVBAR UNIFICADA */
+.navbar {
+  background: #fff;
+  border-bottom: 3px solid #ffd100;
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.navbar img { height: 55px; }
+
+/* ENCABEZADOS DE SECCIÓN */
+.header {
+  background: linear-gradient(135deg, #0072bb 0%, #005a96 100%);
+  color: #fff;
+  padding: 15px 20px;
+  text-align: center;
+  font-weight: 600;
+  position: relative;
+  min-height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.back-btn {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, .16);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.back-btn:before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  border-left: 2px solid #fff;
+  border-bottom: 2px solid #fff;
+  transform: rotate(45deg);
+  margin-left: 4px;
+}
+
+.container {
+  padding: 25px 20px 90px;
+  max-width: 950px;
+  margin: auto;
+  animation: aparecer .3s ease;
+}
+
+h1 { font-size: 24px; margin-bottom: 8px; color: #111; }
+h2 { color: #0072bb; font-size: 22px; margin-top: 0; }
+.subtitle { color: #666; font-size: 15px; margin-bottom: 25px; }
+
+/* SECCIÓN LOGIN */
+#login {
+  padding: 40px 20px;
+  min-height: calc(100vh - 82px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.login-box {
+  background: #fff;
+  border-radius: 12px;
+  padding: 30px;
+  width: 100%;
+  max-width: 450px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  border: 1px solid #eaeaea;
+}
+
+.login-box h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.input-group {
+  margin-bottom: 16px;
+}
+
+.input-group label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #555;
+  margin-bottom: 6px;
+}
+
+input {
+  width: 100%;
+  padding: 14px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-family: 'Encode Sans', sans-serif;
+  font-size: 15px;
+  transition: 0.2s;
+  background: #fff;
+  color: #222;
+}
+
+input:focus {
+  outline: none;
+  border-color: #0072bb;
+  box-shadow: 0 0 0 3px rgba(0,114,187,0.1);
+}
+
+/* BOTONES */
+.btn {
+  display: block;
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 700;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: 0.2s;
+  text-align: center;
+  font-size: 14px;
+  font-family: 'Encode Sans', sans-serif;
+}
+
+.btn-principal { background: #0072bb; color: #fff; }
+.btn-secundario { background: #00a650; color: #fff; }
+
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+/* COMPONENTES */
+.card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 25px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  border: 1px solid #eaeaea;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 15px;
+}
+
+.item {
+  background: #eef6fc;
+  border-radius: 12px;
+  padding: 18px 10px;
+  text-align: center;
+  font-size: 13px;
+  color: #0072bb;
+  font-weight: 600;
+  cursor: pointer;
+  transition: .2s;
+  border: 1px solid rgba(0,114,187,0.1);
+}
+
+.item:hover { background: #e2f0fd; }
+.item:active { transform: scale(.95); }
+.item .menu-icon { font-size: 26px; display: block; margin-bottom: 8px; }
+
+.info {
+  background: #eef6fc;
+  border-left: 5px solid #0072bb;
+  padding: 18px;
+  border-radius: 8px;
+  margin-top: 15px;
+  font-size: 14px;
+  line-height: 1.6;
+  text-align: left;
+  color: #333;
+}
+
+.security-banner {
+  background: #eafaf1;
+  border: 1px solid #2ecc71;
+  border-radius: 8px;
+  padding: 12px;
+  margin-top: 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #1e7e34;
+  font-size: 13px;
+  font-weight: 500;
+  text-align: left;
+}
+
+.footer {
+  background: #111;
+  color: #bbb;
+  padding: 40px 20px;
+  width: 100%;
+  margin-top: 60px;
+  font-size: 14px;
+  text-align: center;
+}
+
+.footer p { margin: 5px 0; }
+.footer strong { color: #fff; }
+
+/* LOADER */
+#loader, #pageLoader {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.spinner {
+  width: 45px; height: 45px;
+  border: 4px solid #f1f1f1;
+  border-top: 4px solid #0072bb;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-top: 20px;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* VISTAS Y TARJETAS DE DOCUMENTOS */
+.doc-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,.04);
+  border: 1px solid #eaeaea;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.doc-card:hover { border-color: #0072bb; }
+.doc-card:active { transform: scale(.97); }
+
+.doc-left {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  font-weight: 600;
+  font-size: 16px;
+  color: #333;
+}
+
+.doc-arrow { font-size: 20px; color: #0072bb; font-weight: bold; }
+
+.licencia-box {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 4px 15px rgba(0,0,0,.06);
+  border: 1px solid #eaeaea;
+  overflow: hidden;
+  max-width: 460px;
+  margin: 20px auto;
+}
+
+.licencia-top {
+  background: #f8f9fa;
+  padding: 18px;
+  font-size: 20px;
+  font-weight: 700;
+  color: #111;
+  border-bottom: 1px solid #eee;
+  text-align: center;
+}
+
+.licencia-alerta {
+  padding: 14px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #721c24;
+  background-color: #f8d7da;
+  border-bottom: 1px solid #f5c6cb;
+}
+
+.qr-box {
+  height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid #eee;
+  background: #fafafa;
+}
+
+.qr-box img {
+  width: 180px;
+  height: 180px;
+  object-fit: contain;
+}
+
+.licencia-datos {
+  padding: 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.campo small {
+  display: block;
+  color: #666;
+  font-size: 12px;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.campo strong { font-size: 16px; color: #111; }
+.full { grid-column: 1 / 3; }
+.estado-ok { color: #00a650; font-weight: 700; }
+.estado-no { color: #dc3545; font-weight: 700; }
+.btn-licencia { margin-bottom: 10px; }
+
+.info-extra {
+  padding: 16px;
+  border-top: 1px solid #eee;
+  font-size: 13px;
+  color: #555;
+  background: #f9f9f9;
+  text-align: center;
+}
+.info-extra span { color: #0072bb; font-weight: 600; }
+
+.no-dni {
+  background: #fff;
+  border-radius: 12px;
+  padding: 30px;
+  text-align: center;
+  font-weight: 700;
+  color: #555;
+  box-shadow: 0 4px 12px rgba(0,0,0,.05);
+  border: 1px solid #eaeaea;
+  margin-top: 20px;
+  line-height: 1.5;
+}
+
+.no-dni span {
+  display: block;
+  font-weight: 400;
+  font-size: 13px;
+  color: #666;
+  margin-top: 8px;
+}
+
+/* MODALES Y FLIP CARDS */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 10000;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.8);
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.modal-content {
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  animation: aparecerModal .3s ease;
+}
+
+@keyframes aparecerModal {
+  from { transform: scale(.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.flip-card {
+  background-color: transparent;
+  width: 100%;
+  height: 240px;
+  perspective: 1000px;
+}
+
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+}
+
+.flip-card.flipped .flip-card-inner {
+  transform: rotateY(180deg);
+}
+
+.flip-card-front, .flip-card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+.flip-card-front img, .flip-card-back img { width: 100%; height: 100%; object-fit: cover; }
+.flip-card-back { transform: rotateY(180deg); }
+
+.close-modal {
+  color: #fff;
+  align-self: flex-end;
+  font-size: 30px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-bottom: -10px;
+  line-height: 1;
+}
+
+.dark-btn { background: none; border: none; font-size: 24px; cursor: pointer; color: #0072bb; }
+
+/* MODO OSCURO */
+body.dark-mode { background: #121212; color: #e0e0e0; }
+body.dark-mode .navbar { background: #1a1a1a; border-bottom: 3px solid #ffd100; }
+body.dark-mode .header { background: #0b4f7a; }
+body.dark-mode .card,
+body.dark-mode .doc-card,
+body.dark-mode .licencia-box,
+body.dark-mode .login-box,
+body.dark-mode .no-dni {
+  background: #1e1e1e;
+  color: #f1f5f9;
+  border-color: #333;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+body.dark-mode h1, body.dark-mode h2, body.dark-mode h3,
+body.dark-mode .doc-left, body.dark-mode .campo strong, body.dark-mode .licencia-top { color: #f1f5f9 !important; }
+body.dark-mode .subtitle, body.dark-mode small, body.dark-mode .campo small, body.dark-mode .info-extra { background: #161616; color: #aaa; border-color: #333; }
+body.dark-mode input { background: #2a2a2a; color: #fff; border-color: #555; }
+body.dark-mode .item { background: #222; color: #5ab7ff; border-color: #333; }
+body.dark-mode .item:hover { background: #282828; }
+body.dark-mode .qr-box { background: #161616; border-color: #333; }
+body.dark-mode .footer { background: #000; color: #888; }
+
+@keyframes aparecer {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+#pageLoader { display: none; }
+#pageLoader p { font-size: 14px; color: #666; }
+</style>
+</head>
+
+<body>
+
+<div class="navbar">
+  <img src="https://i.postimg.cc/4xFRWsdW/1000083075-removebg-preview.png" alt="Logo miArgentina">
+  <button id="darkToggle" onclick="toggleDarkMode()" class="dark-btn">🌙</button>
+</div>
+
+<div id="loader">
+  <div style="font-size:24px; color:#0072bb; font-weight:700;">ValidAR</div>
+  <div class="spinner"></div>
+  <div style="margin-top:15px; font-size:14px; color:#666;">Iniciando entorno protegido...</div>
+</div>
+
+<div id="login" style="display:none;">
+  <div class="login-box">
+    <h2>Iniciar Sesión</h2>
+    <p style="font-size:14px; color:#666; text-align:center; margin-top:-10px; margin-bottom:25px;">
+      Anexo digital autorizado para la sincronización de documentación institucional.
+    </p>
+    
+    <div class="input-group">
+      <label for="email">Dirección de Correo Electrónico</label>
+      <input id="email" type="email" placeholder="ejemplo@correo.com" autocomplete="off">
+    </div>
+    
+    <div class="input-group">
+      <label for="dni">Número de DNI (Documento Único)</label>
+      <input id="dni" placeholder="Sin puntos ni espacios" inputmode="numeric" pattern="[0-9]*" autocomplete="off">
+    </div>
+
+    <button onclick="login()" class="btn btn-principal" style="margin-top: 20px;">Acceder de forma segura</button>
+
+    <div class="security-banner">
+      <span>🛡️</span>
+      <div><strong>Validación oficial:</strong> Sistema operando como anexo sincronizado.</div>
+    </div>
+  </div>
+
+  <div class="footer" style="background:transparent; color:#888; margin-top:20px;">
+    <p><strong>ValidAR | Anexo miArgentina</strong></p>
+    <p style="font-size:12px;">© 2026 ValidAR | Todos los derechos reservados.</p>
+  </div>
+</div>
+
+<div id="app" style="display:none">
+
+  <div class="header">
+    <span class="back-btn" id="backBtn" onclick="volverHome()"></span>
+    <div id="tituloSeccion" style="font-size:18px;font-weight:700;">Portal ValidAR (Anexo)</div>
+  </div>
+
+  <div class="container" id="home">
+    <h1 id="saludo">¡Hola!</h1>
+    <div class="subtitle">Gestioná tus datos y accedé de inmediato a tus credenciales convalidadas desde este anexo.</div>
+    
+    <div class="card" id="perfilCard">
+      <div style="width:70px;height:70px;border-radius:50%;overflow:hidden;flex-shrink:0;">
+        <img id="fotoPerfil" src="" style="width:100%;height:100%;object-fit:cover;">
+      </div>
+      <div>
+        <div style="font-size:20px;font-weight:700;" id="perfilNombre"></div>
+        <div id="perfilDni" style="margin-top:4px;color:#666;"></div>
+        <div style="margin-top:8px;">
+          <span class="estado-ok">✔ Identidad validada (Anexo)</span>
+        </div>
+        <div style="margin-top:6px; font-size:12px; color:#666; line-height:1.4;">
+          Por cuestiones de seguridad, su cuenta es constantemente verificada, y esto puede que algunas opciones no estén disponibles. Por favor espere a que esté actualizada en su totalidad o comuníquese con soporte técnico.
+        </div>
+      </div>
+    </div>
+
+    <h2>Mis Credenciales Disponibles</h2>
+    <div class="grid">
+      <div class="item" onclick="abrirDocumentos()"><i class="bi bi-person-vcard menu-icon"></i>Documentos</div>
+      <div class="item" onclick="abrirVehiculos()"><i class="bi bi-car-front menu-icon"></i>Vehículos</div>
+      <div class="item" onclick="abrirTrabajo()"><i class="bi bi-briefcase menu-icon"></i>Trabajo</div>
+      <div class="item" onclick="abrirSalud()"><i class="bi bi-heart-pulse menu-icon"></i>Salud</div>
+      <div class="item" onclick="abrirPagos()"><i class="bi bi-credit-card menu-icon"></i>Pagos</div>
+      <div class="item" onclick="abrirTramites()"><i class="bi bi-file-earmark-text menu-icon"></i>Trámites</div>
+    </div>
+  </div>
+
+  <!-- SECCIONES INTERNAS -->
+  <div class="container" id="seccionVehiculos" style="display:none;">
+    <h2>Mis Vehículos</h2>
+    <div class="doc-card"><div class="doc-left"><i class="bi bi-car-front doc-icon" style="font-size:24px;"></i><div><strong>Vehículo registrado</strong><br><span>Sin vehículos asociados</span></div></div><div class="doc-arrow">›</div></div>
+  </div>
+
+  <div class="container" id="seccionTrabajo" style="display:none;">
+    <h2>Mi Información Laboral</h2>
+    <div class="doc-card"><div class="doc-left"><i class="bi bi-person-badge doc-icon" style="font-size:24px;"></i><div><strong>Datos laborales</strong><br><span>Consultar información registrada</span></div></div><div class="doc-arrow">›</div></div>
+  </div>
+
+  <div class="container" id="seccionSalud" style="display:none;">
+    <h2>Mi Salud Digital</h2>
+    <div class="doc-card"><div class="doc-left"><i class="bi bi-heart-pulse doc-icon" style="font-size:24px;"></i><div><strong>Cobertura médica</strong><br><span>Obra social / prepaga asociada</span></div></div><div class="doc-arrow">›</div></div>
+  </div>
+
+  <div class="container" id="seccionPagos" style="display:none;">
+    <h2>Mis Pagos</h2>
+    <div class="doc-card"><div class="doc-left"><i class="bi bi-credit-card doc-icon" style="font-size:24px;"></i><div><strong>Medios de pago</strong><br><span>Tarjetas y cuentas asociadas</span></div></div><div class="doc-arrow">›</div></div>
+  </div>
+
+  <div class="container" id="seccionTramites" style="display:none;">
+    <h2>Mis Trámites</h2>
+    <div class="doc-card"><div class="doc-left"><i class="bi bi-folder2-open doc-icon" style="font-size:24px;"></i><div><strong>Solicitud de documentación</strong><br><span>Estado: En revisión</span></div></div><div class="doc-arrow">›</div></div>
+  </div>
+
+  <div class="container" id="seccionDocumentos" style="display:none;">
+    <h2>Elegí el documento a visualizar</h2>
+    <div class="doc-card" onclick="mostrarDni()">
+      <div class="doc-left"><i class="bi bi-person-vcard" style="font-size:24px;"></i><div>Documento Nacional de Identidad (DNI)</div></div>
+      <div class="doc-arrow">›</div>
+    </div>
+    <div class="doc-card" onclick="mostrarLicencia()">
+      <div class="doc-left"><i class="bi bi-person-vcard" style="font-size:24px;"></i><div>Licencia Nacional de Conducir (LNC)</div></div>
+      <div class="doc-arrow">›</div>
+    </div>
+    <div class="doc-card" onclick="mostrarTitulo()">
+      <div class="doc-left"><i class="bi bi-mortarboard" style="font-size:24px;"></i><div>Formación Académica (Títulos)</div></div>
+      <div class="doc-arrow">›</div>
+    </div>
+    <div class="doc-card" onclick="mostrarManipulacion()">
+      <div class="doc-left"><i class="bi bi-shield-check" style="font-size:24px;"></i><div>Carnet de Manipulación de Alimentos</div></div>
+      <div class="doc-arrow">›</div>
+    </div>
+  </div>
+
+  <!-- VISTA DNI -->
+  <div class="container" id="verDni" style="display:none;">
+    <h2>Documento Nacional de Identidad</h2>
+    <div id="dniBoxContent"></div>
+  </div>
+
+  <!-- VISTA LICENCIA -->
+  <div class="container" id="verLicencia" style="display:none;">
+    <h2>Licencia de Conducir Digital (LNC)</h2>
+    <div id="licenciaBoxContent"></div>
+  </div>
+
+  <!-- VISTA TÍTULO -->
+  <div class="container" id="verTitulo" style="display:none;">
+    <h2>Certificaciones de Formación Académica</h2>
+    <div id="tituloBoxContent"></div>
+  </div>
+
+  <!-- VISTA MANIPULACIÓN -->
+  <div class="container" id="verManipulacion" style="display:none;">
+    <h2>Carnet de Manipulador de Alimentos Federal</h2>
+    <div id="manipulacionBoxContent"></div>
+  </div>
+
+  <!-- MODALES -->
+  <div id="modalCarnet" class="modal">
+    <div class="modal-content">
+      <span class="close-modal" onclick="cerrarModalCarnet()">&times;</span>
+      <div class="flip-card" id="flipCard">
+        <div class="flip-card-inner">
+          <div class="flip-card-front"><img id="carnetFrente" src=""></div>
+          <div class="flip-card-back"><img id="carnetDorso" src=""></div>
+        </div>
+      </div>
+      <button class="btn btn-secundario" onclick="voltearCarnet()">Ver Dorso</button>
+    </div>
+  </div>
+
+  <div id="modalDni" class="modal">
+    <div class="modal-content">
+      <span class="close-modal" onclick="cerrarModalDni()">&times;</span>
+      <div class="flip-card" id="flipCardDni">
+        <div class="flip-card-inner">
+          <div class="flip-card-front"><img id="dniFrente"></div>
+          <div class="flip-card-back"><img id="dniDorso"></div>
+        </div>
+      </div>
+      <button class="btn btn-principal" onclick="pantallaCompletaDni()">⛶ Ampliar</button>
+      <button class="btn btn-secundario" onclick="girarDni()">↻ Ver reverso</button>
+    </div>
+  </div>
+
+  <div id="pageLoader">
+    <div class="spinner"></div>
+    <p>Cargando...</p>
+  </div>
+
+  <div class="footer">
+    <p><strong>ValidAR | Anexo Tecnológico miArgentina</strong></p>
+    <p style="font-size:12px; color: #888;">Subsistema integrado para consulta de credenciales institucionales.</p>
+    <p style="font-size:12px; color: #666;">© 2026 ValidAR | Todos los derechos reservados.</p>
+  </div>
+</div>
+
+<script>
+setTimeout(() => {
+  document.getElementById("loader").style.display = "none";
+  document.getElementById("login").style.display = "flex";
+}, 1500);
+
+/* 
+  ESTRUCTURA DE DATOS ORDENADA POR SECCIONES
+  Cada usuario contiene bloques perfectamente separados para cada credencial.
+*/
+const usuarios = [
+  {
+    email: "emanuelro2023@gmail.com",
+    dni: "0039686465",
+    nombre: "Fabián Emanuel",
+    apellido: "Rodríguez",
+    foto: "https://i.postimg.cc/PqYPdyX0/Screenshot-20260728-152131-Chrome.jpg",
+    dniGrupo: {
+      numero: "",
+      ejemplar: "",
+      vencimiento: "",
+      estado: "",
+      qr: "", // QR exclusivo de DNI
+      frenteLink: "",
+      dorsoLink: ""
+    },
+    licenciaGrupo: {
+      estado: "",
+      vencimiento: "",
+      qr: "" // QR exclusivo de Licencia
+    },
+    tituloGrupo: {
+      tituloDoc: "https://drive.google.com/file/d/1Eld86jHBZF41N_L7HqmHv5GjB-32b07x/view?usp=drivesdk",
+      analiticoDoc: "https://drive.google.com/file/d/11vU9WzPwiGOCor9G7BEhbk977bw_rZjh/view?usp=drivesdk",
+      fechaEgreso: "10/12/2023",
+      modalidad: "Secundario para Adultos",
+      escuela: "EEMPA N° 1128",
+      qr: "https://i.postimg.cc/7PXMJbfz/October8-025436PM.png" // QR exclusivo de Títulos
+    },
+    manipulacionGrupo: {
+      estado: "",
+      desde: "",
+      hasta: "",
+      qr: "", // QR exclusivo de Manipulación
+      frenteLink: "",
+      dorsoLink: ""
+    }
+  },
+];
+
+let usuarioActual = null;
+
+function login() {
+  const emailInput = document.getElementById("email").value.trim().toLowerCase();
+  const dniInput = document.getElementById("dni").value.trim();
+
+  const user = usuarios.find(u => u.email.toLowerCase() === emailInput && u.dni === dniInput);
+
+  if (!user) {
+    alert("Los datos de acceso ingresados no coinciden con nuestros registros del anexo.");
+    return;
+  }
+
+  usuarioActual = user;
+
+  document.getElementById("perfilNombre").innerText = usuarioActual.nombre + " " + usuarioActual.apellido;
+  document.getElementById("perfilDni").innerText = "DNI " + usuarioActual.dni;
+  document.getElementById("fotoPerfil").src = usuarioActual.foto || "";
+
+  document.getElementById("login").style.display = "none";
+  document.getElementById("loader").style.display = "flex";
+
+  setTimeout(() => {
+    document.getElementById("loader").style.display = "none";
+    document.getElementById("app").style.display = "block";
+    document.getElementById("saludo").innerText = "¡Hola, " + usuarioActual.nombre + "!";
+    volverHome();
+  }, 1200);
+}
+
+function abrirDocumentos() {
+  cargarPantalla();
+  cambiarTitulo("Mis Documentos (Anexo)");
+  document.getElementById("home").style.display = "none";
+  document.getElementById("seccionDocumentos").style.display = "block";
+  document.getElementById("backBtn").style.display = "flex";
+}
+
+function volverHome() {
+  cambiarTitulo("Portal ValidAR (Anexo)");
+  document.getElementById("home").style.display = "block";
+  document.getElementById("seccionDocumentos").style.display = "none";
+  document.getElementById("verLicencia").style.display = "none";
+  document.getElementById("verDni").style.display = "none";
+  document.getElementById("verTitulo").style.display = "none";
+  document.getElementById("verManipulacion").style.display = "none";
+  document.getElementById("backBtn").style.display = "none";
+  document.getElementById("seccionVehiculos").style.display = "none";
+  document.getElementById("seccionTrabajo").style.display = "none";
+  document.getElementById("seccionSalud").style.display = "none";
+  document.getElementById("seccionPagos").style.display = "none";
+  document.getElementById("seccionTramites").style.display = "none";
+  cerrarModalDni();
+  cerrarModalCarnet();
+}
+
+function mostrarDni() {
+  document.getElementById("seccionDocumentos").style.display = "none";
+  document.getElementById("verDni").style.display = "block";
+
+  const contenedor = document.getElementById("dniBoxContent");
+  const datos = usuarioActual.dniGrupo;
+  const tieneDatos = datos.frenteLink && datos.dorsoLink && datos.numero;
+
+  if (!tieneDatos) {
+    contenedor.innerHTML = `
+      <div class="no-dni">
+        DOCUMENTO AÚN NO DISPONIBLE
+        <span>Algunos datos puede que no se visualicen, espere mientras finalizamos la vinculación con miArgentina.</span>
+      </div>`;
+    return;
+  }
+
+  contenedor.innerHTML = `
+    <div class="licencia-box">
+      <div class="licencia-top">Documento Nacional de Identidad</div>
+      <div class="qr-box"><img src="${datos.qr}" alt="QR DNI"></div>
+      <div class="licencia-datos">
+        <div class="campo"><small>Nombre completo</small><strong>${usuarioActual.nombre} ${usuarioActual.apellido}</strong></div>
+        <div class="campo"><small>Número de DNI</small><strong>${datos.numero}</strong></div>
+        <div class="campo"><small>Ejemplar</small><strong>${datos.ejemplar}</strong></div>
+        <div class="campo"><small>Vencimiento</small><strong>${datos.vencimiento}</strong></div>
+        <div class="campo full"><small>Estado</small><strong class="estado-ok">${datos.estado}</strong></div>
+      </div>
+      <div style="padding:20px"><button class="btn btn-principal" onclick="abrirModalDni()">Ver DNI Digital</button></div>
+      <div class="info-extra"><strong>Datos suministrados por</strong> <span>RENAPER (Anexo).</span></div>
+    </div>`;
+
+  document.getElementById("dniFrente").src = datos.frenteLink;
+  document.getElementById("dniDorso").src = datos.dorsoLink;
+}
+
+function mostrarLicencia() {
+  document.getElementById("seccionDocumentos").style.display = "none";
+  document.getElementById("verLicencia").style.display = "block";
+
+  const contenedor = document.getElementById("licenciaBoxContent");
+  const datos = usuarioActual.licenciaGrupo;
+  const tieneDatos = datos.qr;
+
+  if (!tieneDatos) {
+    contenedor.innerHTML = `
+      <div class="no-dni">
+        DOCUMENTO AÚN NO DISPONIBLE
+        <span>Algunos datos puede que no se visualicen, espere mientras finalizamos la vinculación con miArgentina.</span>
+      </div>`;
+    return;
+  }
+
+  contenedor.innerHTML = `
+    <div class="licencia-box">
+      <div class="licencia-top">Licencia Nacional de Conducir</div>
+      <div class="licencia-alerta">Si le retuvieron o inhabilitaron su licencia física, recuerde que no se encuentra apto para circular.</div>
+      <div class="qr-box"><img src="${datos.qr}" alt="Código QR de Licencia"></div>
+      <div class="licencia-datos">
+        <div class="campo"><small>Nombre</small><strong>${usuarioActual.nombre}</strong></div>
+        <div class="campo"><small>Apellido</small><strong>${usuarioActual.apellido}</strong></div>
+        <div class="campo full"><small>Número de DNI</small><strong>${usuarioActual.dni}</strong></div>
+        <div class="campo"><small>Estado Habilitación</small><strong class="estado-ok">${datos.estado}</strong></div>
+        <div class="campo"><small>Vencimiento</small><strong>${datos.vencimiento}</strong></div>
+      </div>
+      <div class="info-extra"><strong>Datos suministrados por</strong> <span>Ministerio de Transporte de la Nación.</span></div>
+    </div>`;
+  }
+  function mostrarTitulo() {
+  document.getElementById("seccionDocumentos").style.display = "none";
+  document.getElementById("verTitulo").style.display = "block";
+
+  const contenedor = document.getElementById("tituloBoxContent");
+  const datos = usuarioActual.tituloGrupo;
+  const tieneDatos = datos.tituloDoc && datos.qr;
+
+  if (!tieneDatos) {
+    contenedor.innerHTML = `
+      <div class="no-dni">
+        DOCUMENTO AÚN NO DISPONIBLE
+        <span>Algunos datos puede que no se visualicen, espere mientras finalizamos la vinculación con miArgentina.</span>
+      </div>`;
+    return;
+  }
+
+  contenedor.innerHTML = `
+    <div class="licencia-box">
+      <div class="licencia-top">Historial Educativo Convalidado</div>
+      <div class="qr-box"><img src="${datos.qr}" alt="QR Académico"></div>
+      <div class="licencia-datos">
+        <div class="campo full"><small>Nombre y Apellido Titular</small><strong>${usuarioActual.nombre} ${usuarioActual.apellido}</strong></div>
+        <div class="campo"><small>Fecha de Egreso</small><strong>${datos.fechaEgreso}</strong></div>
+        <div class="campo"><small>Modalidad</small><strong>${datos.modalidad}</strong></div>
+        <div class="campo full"><small>Institución Educativa Emisora</small><strong>${datos.escuela}</strong></div>
+      </div>
+      <div style="padding:0 20px 20px 20px;">
+        <button class="btn btn-principal btn-licencia" onclick="verTituloDoc()">Visualizar Título Oficial</button>
+        <button class="btn btn-secundario btn-licencia" onclick="verAnalitico()" style="margin-top:10px;">Visualizar Libro Matriz / Analítico</button>
+      </div>
+    </div>`;
+}
+
+function mostrarManipulacion() {
+  document.getElementById("seccionDocumentos").style.display = "none";
+  document.getElementById("verManipulacion").style.display = "block";
+
+  const contenedor = document.getElementById("manipulacionBoxContent");
+  const datos = usuarioActual.manipulacionGrupo;
+  const tieneDatos = datos.frenteLink && datos.qr;
+
+  if (!tieneDatos) {
+    contenedor.innerHTML = `
+      <div class="no-dni">
+        DOCUMENTO AÚN NO DISPONIBLE
+        <span>Algunos datos puede que no se visualicen, espere mientras finalizamos la vinculación con miArgentina.</span>
+      </div>`;
+    return;
+  }
+
+  contenedor.innerHTML = `
+    <div class="licencia-box">
+      <div class="licencia-top">Control de Sanidad y Alimentos</div>
+      <div class="qr-box"><img src="${datos.qr}" alt="QR Manipulación"></div>
+      <div class="licencia-datos">
+        <div class="campo"><small>Nombre</small><strong>${usuarioActual.nombre}</strong></div>
+        <div class="campo"><small>Apellido</small><strong>${usuarioActual.apellido}</strong></div>
+        <div class="campo full"><small>Estado Habilitación</small><strong class="estado-ok">${datos.estado}</strong></div>
+        <div class="campo"><small>Fecha Desde</small><strong>${datos.desde}</strong></div>
+        <div class="campo"><small>Fecha Hasta</small><strong>${datos.hasta}</strong></div>
+      </div>
+      <div style="padding:0 20px 20px 20px;">
+        <button class="btn btn-principal" onclick="abrirModalCarnet()">Ver Credencial</button>
+      </div>
+    </div>`;
+
+  document.getElementById("carnetFrente").src = datos.frenteLink;
+  document.getElementById("carnetDorso").src = datos.dorsoLink;
+}
+
+function abrirModalCarnet() { document.getElementById("modalCarnet").style.display = "flex"; }
+function cerrarModalCarnet() { document.getElementById("modalCarnet").style.display = "none"; document.getElementById("flipCard").classList.remove("flipped"); }
+function voltearCarnet() { document.getElementById("flipCard").classList.toggle("flipped"); }
+function verTituloDoc() { if(usuarioActual.tituloGrupo.tituloDoc) window.open(usuarioActual.tituloGrupo.tituloDoc); }
+function verAnalitico() { if(usuarioActual.tituloGrupo.analiticoDoc) window.open(usuarioActual.tituloGrupo.analiticoDoc); }
+function abrirModalDni() { document.getElementById("modalDni").style.display = "flex"; }
+function cerrarModalDni() { document.getElementById("modalDni").style.display = "none"; document.getElementById("flipCardDni").classList.remove("flipped"); }
+function girarDni() { document.getElementById("flipCardDni").classList.toggle("flipped"); }
+
+function toggleDarkMode() {
+  document.body.classList.toggle("dark-mode");
+  const btn = document.getElementById("darkToggle");
+  btn.innerHTML = document.body.classList.contains("dark-mode") ? "☀️" : "🌙";
+  localStorage.setItem("modoOscuro", document.body.classList.contains("dark-mode"));
+}
+
+window.onload = function() {
+  if(localStorage.getItem("modoOscuro") === "true") {
+    document.body.classList.add("dark-mode");
+    document.getElementById("darkToggle").innerHTML = "☀️";
+  }
+}
+
+function pantallaCompletaDni() {
+  let imagen = document.querySelector("#flipCardDni img");
+  if(imagen && imagen.requestFullscreen) imagen.requestFullscreen();
+}
+
+function abrirVehiculos() { cargarPantalla(); cambiarTitulo("Mis Vehículos"); document.getElementById("home").style.display="none"; document.getElementById("seccionVehiculos").style.display="block"; document.getElementById("backBtn").style.display="flex"; }
+function abrirTrabajo() { cargarPantalla(); cambiarTitulo("Mi Trabajo"); document.getElementById("home").style.display="none"; document.getElementById("seccionTrabajo").style.display="block"; document.getElementById("backBtn").style.display="flex"; }
+function abrirSalud() { cargarPantalla(); cambiarTitulo("Mi Salud Digital"); document.getElementById("home").style.display="none"; document.getElementById("seccionSalud").style.display="block"; document.getElementById("backBtn").style.display="flex"; }
+function abrirPagos() { cargarPantalla(); cambiarTitulo("Mis Pagos"); document.getElementById("home").style.display="none"; document.getElementById("seccionPagos").style.display="block"; document.getElementById("backBtn").style.display="flex"; }
+function abrirTramites() { cargarPantalla(); cambiarTitulo("Mis Trámites"); document.getElementById("home").style.display="none"; document.getElementById("seccionTramites").style.display="block"; document.getElementById("backBtn").style.display="flex"; }
+function cambiarTitulo(titulo) { document.getElementById("tituloSeccion").innerText = titulo; }
+
+function cargarPantalla() {
+  const loader = document.getElementById("pageLoader");
+  if(!loader) return;
+  loader.style.display = "flex";
+  setTimeout(() => { loader.style.display = "none"; }, 400);
+}
+</script>
+
+</body>
+</html>
