@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ValidAR | miArgentina - Cooperación Tecnológica Oficial</title>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Encode+Sans:wght@100;200;300;400;500;600;700;800;900&display=swap">
+
+<style>
+/* LOADER ESTILIZADO */
+#loader-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid #eef6fc;
+  border-top: 5px solid #0072bb;
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+  margin-bottom: 16px;
+}
+
+.loader-text {
+  font-family: 'Encode Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: #0072bb;
+  letter-spacing: 0.5px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+body{
+  font-family:'Encode Sans',sans-serif;
+  margin:0;
+  background:#f9f9f9;
+  color:#222;
+}
+
+/* NAVBAR Y MENÚ HAMBURGUESA */
+.navbar{
+  background:#fff;
+  border-bottom:3px solid #ffd100;
+  padding:12px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+}
+
+.navbar img{
+  height:45px;
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.btn-login-nav {
+  background: #0072bb;
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 14px;
+  transition: 0.2s;
+}
+
+.btn-login-nav:hover {
+  background: #005a96;
+}
+
+.menu-toggle {
+  background: none;
+  border: none;
+  font-size: 26px;
+  cursor: pointer;
+  color: #333;
+  padding: 5px;
+}
+
+/* MENÚ DESPLEGABLE */
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: 20px;
+  background: #fff;
+  width: 300px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+  border-radius: 8px;
+  border: 1px solid #eaeaea;
+  z-index: 1000;
+  overflow: hidden;
+}
+
+.dropdown-menu.active {
+  display: block;
+}
+
+.dropdown-menu a {
+  display: block;
+  padding: 12px 18px;
+  color: #333;
+  text-decoration: none;
+  font-size: 14px;
+  border-bottom: 1px solid #f1f1f1;
+  transition: 0.2s;
+  cursor: pointer;
+}
+
+.dropdown-menu a:hover {
+  background: #eef6fc;
+  color: #0072bb;
+}
+
+.header{
+  background: linear-gradient(135deg, #0072bb 0%, #005a96 100%);
+  color:#fff;
+  padding:40px 20px;
+  text-align:center;
+}
+
+.header h1{
+  margin:0 0 10px 0;
+  font-size:34px;
+  font-weight: 700;
+}
+
+.header p{
+  margin:0;
+  font-size:17px;
+  opacity: 0.95;
+}
+
+.container{
+  max-width:950px;
+  margin:auto;
+  padding:20px;
+}
+
+/* BANNER INSTITUCIONAL / COOPERACIÓN */
+.banner-secretaria {
+  background: linear-gradient(135deg, #eafaf1 0%, #d4efdf 100%);
+  border: 2px solid #2ecc71;
+  border-radius: 12px;
+  padding: 25px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.banner-secretaria h2 {
+  color: #1e7e34;
+  margin-top: 0;
+  font-size: 22px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.banner-secretaria p {
+  color: #2c3e50;
+  font-size: 15px;
+  line-height: 1.6;
+  margin-bottom: 15px;
+}
+
+.autoridades-box {
+  background: rgba(255, 255, 255, 0.7);
+  border-left: 4px solid #2ecc71;
+  padding: 12px 15px;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #2c3e50;
+  line-height: 1.6;
+}
+
+.card{
+  background:#fff;
+  border-radius:12px;
+  padding:25px;
+  margin-bottom:24px;
+  box-shadow:0 4px 15px rgba(0,0,0,0.05);
+  border: 1px solid #eaeaea;
+}
+
+.card h2{
+  margin-top:0;
+  color:#0072bb;
+  font-size: 22px;
+}
+
+.grid-modulos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.modulo-item {
+  background: #f8fbfe;
+  border: 1px solid #d5e6f8;
+  border-radius: 8px;
+  padding: 18px;
+}
+
+.modulo-item h4 {
+  margin-top: 0;
+  color: #005a96;
+  font-size: 16px;
+}
+
+.modulo-item p {
+  margin: 0;
+  font-size: 14px;
+  color: #555;
+  line-height: 1.5;
+}
+
+.grid-cooperacion {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.coop-item {
+  background: #fdfefe;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 18px;
+}
+
+.coop-item h4 {
+  margin-top: 0;
+  color: #1e7e34;
+  font-size: 15px;
+}
+
+.coop-item p {
+  margin: 0;
+  font-size: 14px;
+  color: #444;
+  line-height: 1.5;
+}
+
+/* ACORDEÓN / FAQ */
+.faq-item {
+  border-bottom: 1px solid #eaeaea;
+  padding: 15px 0;
+}
+
+.faq-item:last-child {
+  border-bottom: none;
+}
+
+.faq-question {
+  font-weight: 700;
+  color: #2c3e50;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.faq-answer {
+  font-size: 14px;
+  color: #555;
+  margin-top: 10px;
+  line-height: 1.6;
+}
+
+.btn{
+  display:inline-block;
+  padding:14px 28px;
+  border-radius:6px;
+  text-decoration:none;
+  font-weight:700;
+  text-transform:uppercase;
+  transition:0.2s;
+  text-align: center;
+}
+
+.btn-secundario{
+  background:#00a650;
+  color:#fff;
+}
+
+.btn:hover{
+  transform:translateY(-1px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.info{
+  background:#eef6fc;
+  border-left:5px solid #0072bb;
+  padding:18px;
+  border-radius:8px;
+  margin-top:18px;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.security-banner {
+  background: #fdfefe;
+  border: 1px solid #dcdcdc;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #333;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+footer{
+  background:#111;
+  color: #bbb;
+  padding:40px 20px;
+  margin-top:60px;
+  font-size:14px;
+}
+
+.footer-content {
+  max-width: 950px;
+  margin: auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.footer-links a {
+  color: #fff;
+  text-decoration: none;
+  margin-right: 15px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.footer-links a:hover {
+  text-decoration: underline;
+}
+
+.small{
+  font-size:12px;
+  color:#888;
+  margin-top: 15px;
+}
+
+/* MODALES CON TRANSICIÓN SUAVE (FADE-IN) */
+.modal-overlay {
+  display: flex;
+  opacity: 0;
+  visibility: hidden;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 10000;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  box-sizing: border-box;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.modal-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal-content {
+  background: #fff;
+  width: 100%;
+  max-width: 600px;
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+  position: relative;
+  max-height: 90vh;
+  overflow-y: auto;
+  transform: translateY(20px);
+  transition: transform 0.3s ease;
+}
+
+.modal-overlay.active .modal-content {
+  transform: translateY(0);
+}
+
+.close-modal {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 24px;
+  font-weight: bold;
+  color: #888;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.close-modal:hover {
+  color: #111;
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    padding: 10px 15px;
+  }
+  .navbar img {
+    height: 38px;
+  }
+  .header {
+    padding: 30px 15px;
+  }
+  .header h1 {
+    font-size: 26px;
+  }
+  .container {
+    padding: 15px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- LOADER -->
+<div id="loader-overlay">
+  <div class="spinner"></div>
+  <div class="loader-text">Sincronizando portal ValidAR...</div>
+</div>
+
+<div class="navbar">
+  <img src="https://i.postimg.cc/4xFRWsdW/1000083075-removebg-preview.png" alt="Logo miArgentina">
+  
+  <div class="nav-right">
+    <a href="login.html" class="btn-login-nav">Iniciar Sesión</a>
+    <button class="menu-toggle" id="menu-toggle-btn">&#9776;</button>
+  </div>
+
+  <!-- MENÚ DESPLEGABLE (HAMBURGUESA) -->
+  <div class="dropdown-menu" id="dropdown-menu">
+    <a href="login.html">Iniciar Sesión</a>
+    <a href="miformacion.html">Solicitar Trámite Académico</a>
+    <a id="menu-qr">Cómo Verificar Códigos QR</a>
+    <a id="menu-validez">Validez de la Documentación</a>
+    <a id="menu-mas-info">Más Información</a>
+    <a id="menu-soporte">Soporte Técnico</a>
+  </div>
+</div>
+
+<div class="header">
+  <h1>ValidAR | miArgentina</h1>
+  <p>Plataforma tecnológica de desarrollo privado en cooperación con la Secretaría de Innovación, Ciencia y Tecnología.</p>
+</div>
+
+<div class="container">
+
+  <!-- BANNER DE SEGURIDAD -->
+  <div class="security-banner">
+    <span>🛡️</span>
+    <div>
+      <strong>Entorno Institucional Colaborativo:</strong> Estándares de seguridad avanzada y cumplimiento normativo bajo esquemas de vinculación tecnológica.
+    </div>
+  </div>
+
+  <!-- AVISO SUPERIOR: COOPERACIÓN Y MARCO LEGAL -->
+  <div class="banner-secretaria">
+    <h2>Modelo de Cooperación Público-Privada (PPP)</h2>
+    <p>
+      <strong>ValidAR</strong> opera como un desarrollo tecnológico independiente de iniciativa privada, articulado bajo convenios de asistencia y cooperación técnica con organismos del Estado para potenciar la digitalización ciudadana.
+    </p>
+    <div class="autoridades-box">
+      <strong>Articulación institucional:</strong> Secretaría de Innovación, Ciencia y Tecnología.<br>
+      <strong>Titular responsable:</strong> Darío Genua (Secretario de Innovación, Ciencia y Tecnología).<br>
+      <strong>Marco Legal de Referencia:</strong> Ley N° 23.877 (Promoción y Fomento de la Innovación Tecnológica) y regímenes de convenios de cooperación de la Administración Pública Nacional.
+    </div>
+  </div>
+
+  <!-- SECCIÓN: POR QUÉ SE REALIZA ESTA COOPERACIÓN (PUNTOS 1 AL 4) -->
+  <div class="card">
+    <h2>Fundamentos de la Cooperación Tecnológica</h2>
+    <p>
+      Este esquema de trabajo conjunto entre el sector privado y el Estado se implementa formalmente bajo los siguientes motivos estratégicos y operativos:
+    </p>
+
+    <div class="grid-cooperacion">
+      <div class="coop-item">
+        <h4>1) Agilidad y Velocidad de Desarrollo</h4>
+        <p>Permite superar los tiempos burocráticos tradicionales, iterando y desplegando soluciones informáticas modernas con máxima rapidez.</p>
+      </div>
+
+      <div class="coop-item">
+        <h4>2) Innovación y Flexibilidad Técnica</h4>
+        <p>Incorpora talento externo especializado y arquitecturas de software avanzadas que optimizan la experiencia de usuario digital.</p>
+      </div>
+
+      <div class="coop-item">
+        <h4>3) Optimización de Costos y Eficiencia</h4>
+        <p>Aprovecha desarrollos privados ya iniciados que resuelven demandas ciudadanas reales sin requerir grandes licitaciones estatales masivas.</p>
+      </div>
+
+      <div class="coop-item">
+        <h4>4) Federalización y Escalabilidad</h4>
+        <p>Impulsa herramientas flexibles nacidas desde la comunidad que el Estado puede auditar, integrar y adoptar progresivamente.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECCIÓN DE PREGUNTAS FRECUENTES (FAQ) -->
+  <div class="card">
+    <h2>Preguntas Frecuentes (FAQ)</h2>
+    
+    <div class="faq-item">
+      <div class="faq-question">¿Qué es exactamente ValidAR y para qué sirve?</div>
+      <div class="faq-answer">ValidAR es una plataforma digital moderna diseñada para centralizar, gestionar y visualizar de manera inmediata tu documentación personal, credenciales y títulos académicos en un solo lugar.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">¿Cómo se garantiza la seguridad de mis datos personales?</div>
+      <div class="faq-answer">Utilizamos estrictos estándares de encriptación y cumplimos con los lineamientos de la Ley N° 25.326 de Protección de Datos Personales, garantizando que tu información privada esté totalmente protegida.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">¿Cómo funcionan los códigos QR de verificación?</div>
+      <div class="faq-answer">Cada credencial cuenta con un código QR único que al ser escaneado con cualquier dispositivo móvil verifica instantáneamente la autenticidad y vigencia del documento.</div>
+    </div>
+  </div>
+
+  <!-- SECCIÓN: PRIVACIDAD Y MARCO LEGAL DE DATOS -->
+  <div class="card">
+    <h2>Privacidad, Seguridad y Marco Legal de Datos</h2>
+    <p>
+      La protección de tu identidad digital es nuestra prioridad absoluta. ValidAR opera bajo un estricto marco de gobernanza de la información:
+    </p>
+    <div class="info">
+      <strong>Compromiso de Confidencialidad:</strong><br>
+      • <strong>Ley N° 25.326:</strong> Cumplimiento riguroso de las normativas de protección integral de datos personales.<br>
+      • <strong>Seguridad Avanzada:</strong> Procesamiento seguro de credenciales mediante canales cifrados y auditorías permanentes.
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <div class="footer-content">
+    <div>
+      <p><strong>ValidAR | Portal de Gestión Documental</strong></p>
+      <p class="small">Desarrollo privado en cooperación tecnológica con miArgentina.</p>
+    </div>
+    <div class="footer-links">
+      <p>
+        <a id="footer-terminos">Términos y Condiciones</a>
+        <a id="footer-privacidad">Políticas de Privacidad</a>
+        <a id="footer-soporte">Soporte Técnico</a>
+      </p>
+      <p class="small">
+        © 2026 ValidAR. Todos los derechos reservados.
+      </p>
+    </div>
+  </div>
+</footer>
+
+<!-- MODALES PARA LOS BOTONES DEL MENÚ -->
+<div id="modal-qr" class="modal-overlay">
+  <div class="modal-content">
+    <button class="close-modal" data-modal="modal-qr">&times;</button>
+    <h3>Cómo Verificar Códigos QR</h3>
+    <p>Cada documento emitido en ValidAR incluye un código QR único de seguridad. Para verificarlo, simplemente abrís la cámara de tu teléfono celular o cualquier aplicación lectora de códigos QR, apuntás al recuadro del documento y el sistema te redirigirá automáticamente a nuestra pasarela de validación en línea para confirmar su autenticidad y vigencia en tiempo real.</p>
+  </div>
+</div>
+
+<div id="modal-validez" class="modal-overlay">
+  <div class="modal-content">
+    <button class="close-modal" data-modal="modal-validez">&times;</button>
+    <h3>Validez de la Documentación</h3>
+    <p>La documentación obtenida y gestionada a través de ValidAR cuenta con validez administrativa basada en sistemas de cotejo contra registros oficiales y protocolos de autenticación avanzados. Permite acreditar identidad, títulos y credenciales de forma digital ante terceros de manera ágil y segura.</p>
+  </div>
+</div>
+
+<div id="modal-mas-info" class="modal-overlay">
+  <div class="modal-content">
+    <button class="close-modal" data-modal="modal-mas-info">&times;</button>
+    <h3>Más Información sobre ValidAR</h3>
+    <p>ValidAR es un proyecto de innovación tecnológica desarrollado bajo un modelo de cooperación público-privada. Su objetivo principal es ofrecer a la ciudadanía una herramienta moderna, interoperable y segura para la portabilidad de credenciales y certificados oficiales.</p>
+  </div>
+</div>
+
+<div id="modal-soporte" class="modal-overlay">
+  <div class="modal-content">
+    <button class="close-modal" data-modal="modal-soporte">&times;</button>
+    <h3>Soporte Técnico</h3>
+    <p>¿Tenés o tuviste algún inconveniente técnico con tu cuenta o documentos?</p>
+    <p>Comunicate con nuestro equipo de asistencia a través del correo electrónico <strong>soporte@portalvalidar.com.ar</strong>.</p>
+  </div>
+</div>
+
+<div id="modal-privacidad" class="modal-overlay">
+  <div class="modal-content">
+    <button class="close-modal" data-modal="modal-privacidad">&times;</button>
+    <h3>Políticas de Privacidad</h3>
+    <p>En estricto cumplimiento de la Ley N° 25.326 de Protección de Datos Personales, ValidAR asegura el resguardo de la información procesada exclusivamente para fines de autenticación y acreditación documental.</p>
+  </div>
+</div>
+
+<div id="modal-terminos" class="modal-overlay">
+  <div class="modal-content">
+    <button class="close-modal" data-modal="modal-terminos">&times;</button>
+    <h3>Términos y Condiciones</h3>
+    <p>El uso del portal ValidAR implica la aceptación de los protocolos de seguridad y validación establecidos. Queda prohibida la adulteración o uso indebido de los documentos digitales visualizados.</p>
+  </div>
+</div>
+
+<script>
+  // Función para ocultar el loader con seguridad
+  function ocultarLoader() {
+    const loader = document.getElementById('loader-overlay');
+    if (loader && loader.style.visibility !== 'hidden') {
+      loader.style.opacity = '0';
+      setTimeout(() => { loader.style.visibility = 'hidden'; }, 400);
+    }
+  }
+
+  // Comprobar si la página ya cargó, o esperar al evento load o DOMContentLoaded
+  if (document.readyState === 'complete') {
+    ocultarLoader();
+  } else {
+    window.addEventListener('load', ocultarLoader);
+    // Fallback de seguridad por si el evento load se pierde
+    setTimeout(ocultarLoader, 2000);
+  }
+
+  // Toggle del menú desplegable hamburguesa
+  const menuToggleBtn = document.getElementById('menu-toggle-btn');
+  const dropdownMenu = document.getElementById('dropdown-menu');
+
+  menuToggleBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    dropdownMenu.classList.toggle('active');
+  });
+
+  window.addEventListener('click', () => {
+    if (dropdownMenu.classList.contains('active')) {
+      dropdownMenu.classList.remove('active');
+    }
+  });
+
+  dropdownMenu.addEventListener('click', (e) => {
+    e.stopPropagation();
+  });
+
+  // Lógica de modales con clases active para transiciones fluidas
+  const abrirModal = (id) => { 
+    dropdownMenu.classList.remove('active');
+    document.getElementById(id).classList.add('active'); 
+  };
+  
+  const cerrarModal = (id) => { 
+    document.getElementById(id).classList.remove('active'); 
+  };
+
+  document.getElementById('menu-qr').addEventListener('click', () => abrirModal('modal-qr'));
+  document.getElementById('menu-validez').addEventListener('click', () => abrirModal('modal-validez'));
+  document.getElementById('menu-mas-info').addEventListener('click', () => abrirModal('modal-mas-info'));
+  document.getElementById('menu-soporte').addEventListener('click', () => abrirModal('modal-soporte'));
+  
+  document.getElementById('footer-privacidad').addEventListener('click', () => abrirModal('modal-privacidad'));
+  document.getElementById('footer-terminos').addEventListener('click', () => abrirModal('modal-terminos'));
+  document.getElementById('footer-soporte').addEventListener('click', () => abrirModal('modal-soporte'));
+
+  document.querySelectorAll('.close-modal').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const modalId = e.target.getAttribute('data-modal');
+      cerrarModal(modalId);
+    });
+  });
+
+  window.addEventListener('click', (e) => {
+    if (e.target.classList.contains('modal-overlay')) {
+      e.target.classList.remove('active');
+    }
+  });
+</script>
+
+</body>
+  </html>
+
+  
