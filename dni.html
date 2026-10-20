@@ -327,46 +327,46 @@
             background: rgba(255,255,255,.3);
         }
         .back-extra{
-    display:flex;
-    justify-content:space-between;
-    align-items:flex-start;
-    gap:16px;
-    margin-top:10px;
-}
+            display:flex;
+            justify-content:space-between;
+            align-items:flex-start;
+            gap:16px;
+            margin-top:10px;
+        }
 
-.extra-fields{
-    flex:1;
-    display:flex;
-    flex-direction:column;
-    gap:2px;
-    font-size:8px;
-    font-weight:700;
-    color:#0b2545;
-}
+        .extra-fields{
+            flex:1;
+            display:flex;
+            flex-direction:column;
+            gap:4px;
+            font-size:8px;
+            font-weight:700;
+            color:#0b2545;
+        }
 
-.row-data{
-    display:flex;
-    justify-content:space-between;
-    gap:18px;
-}
+        .row-data{
+            display:flex;
+            justify-content:space-between;
+            gap:18px;
+        }
 
-.fingerprint-box{
-    width:82px;
-    height:105px;
-    border:1px solid #666;
-    background:#fff;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    overflow:hidden;
-    flex-shrink:0;
-}
+        .fingerprint-box{
+            width:82px;
+            height:105px;
+            border:1px solid #666;
+            background:#fff;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            overflow:hidden;
+            flex-shrink:0;
+        }
 
-.fingerprint-box img{
-    width:100%;
-    height:100%;
-    object-fit:contain;
-}
+        .fingerprint-box img{
+            width:100%;
+            height:100%;
+            object-fit:contain;
+        }
     </style>  
 </head>  
 <body class="editing">  
@@ -400,13 +400,10 @@
     <div class="control-group">  
         <label>Fondo Dorso:</label>  
         <input type="file" id="upload-bg-back" accept="image/*" onchange="loadBgBack(event)">  
+    </div>  
     <div class="control-group">
-    <label>Huella Digital:</label>
-    <input type="file"
-           id="upload-fingerprint"
-           accept="image/*"
-           onchange="loadFingerprint(event)">
-    </div>
+        <label>Huella Digital:</label>
+        <input type="file" id="upload-fingerprint" accept="image/*" onchange="loadFingerprint(event)">
     </div>  
 </div>  
 
@@ -505,90 +502,70 @@
             </div>  
 
             <!-- TARJETA DORSO -->
-<div class="dni-card dni-back" id="card-back-bg">
+            <div class="dni-card dni-back" id="card-back-bg">
 
-    <div class="back-extra">
+                <div class="back-extra">
 
-        <div class="extra-fields">
+                    <div class="extra-fields">
 
-            <div class="field-group">
-                <label contenteditable="true">Domicilio</label>
-                <div class="val" contenteditable="true">
-                    San Martín N° 2538 - Cañuelas
-                </div>
-            </div>
+                        <div class="field-group">
+                            <label contenteditable="true">Domicilio</label>
+                            <div class="val" contenteditable="true">
+                                San Martín N° 2538 - Cañuelas
+                            </div>
+                        </div>
 
-            <div class="field-group">
-                <label contenteditable="true">Lugar de nacimiento</label>
-                <div class="val" contenteditable="true">
-                    Provincia de Buenos Aires
-                </div>
-            </div>
+                        <div class="field-group">
+                            <label contenteditable="true">Lugar de nacimiento</label>
+                            <div class="val" contenteditable="true">
+                                Provincia de Buenos Aires
+                            </div>
+                        </div>
 
-            <div class="field-group">
-                <label contenteditable="true">Ingreso al país</label>
-                <div class="val" contenteditable="true">12 ABR 2012</div>
-            </div>
+                        <div class="field-group">
+                            <label contenteditable="true">Categoría</label>
+                            <div class="val" contenteditable="true">TEMPORARIA</div>
+                        </div>
 
-            <div class="field-group">
-                <label contenteditable="true">Categoría</label>
-                <div class="val" contenteditable="true">TEMPORARIA</div>
-            </div>
-
-            <div class="row-data">
-                <div class="field-group">
-                    <label contenteditable="true">Expediente</label>
-                    <div class="val" contenteditable="true">5274201</div>
-                </div>
-
-                <div class="field-group">
-                    <label contenteditable="true">Disposición</label>
-                    <div class="val" contenteditable="true">5306</div>
-                </div>
-            </div>
-
-            <div class="row-data">
-                <div class="field-group">
-                    <label contenteditable="true">Radicación</label>
-                    <div class="val" contenteditable="true">29 MAY 2012</div>
-                </div>
-
-                <div class="field-group">
-                    <label contenteditable="true">Vencimiento</label>
-                    <div class="val" contenteditable="true">29 MAY 2014</div>
-                </div>
-            </div>
-
-        </div>
-
-        <div class="fingerprint-box">
-            <img id="fingerprint-img" src="">
-        </div>
-
-    </div>
-
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;font-size:8px;">
-        <div contenteditable="true">
-            CPN Diego César Santilli<br>
-            Ministro del Interior
-        </div>
-
-        <div contenteditable="true">
-            CUIL: 27-99999999-0
-        </div>
-
-        <div contenteditable="true">
-            Trámite Nº: 00570060060
-        </div>
-    </div>
-
-    <div class="mrz" contenteditable="true">
-        IDARG45980666<4<<<<<<<<<<<<<<<<<<br>
-        0107998F201808ARG<<<<<<RABBIA<<<<<<<AGUSTIN<<<<<<<0<br>
-        IGNACIO<<<<<RODRIGUEZ<<<<<MARIANA<<<<<
-    </div>
+                        <div class="field-group">
+                            <label contenteditable="true">Radicación</label>
+                            <div class="val" contenteditable="true">29 MAY 2012</div>
+                        </div>
 
                     </div>
+
+                    <div class="fingerprint-box">
+                        <img id="fingerprint-img" src="">
+                    </div>
+
+                </div>
+
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;font-size:8px;">
+                    <div contenteditable="true">
+                        CPN Diego César Santilli<br>
+                        Ministro del Interior
+                    </div>
+
+                    <div contenteditable="true">
+                        CUIL: 27-99999999-0
+                    </div>
+
+                    <div contenteditable="true">
+                        Trámite Nº: 00570060060
+                    </div>
+                </div>
+
+                <div class="mrz" contenteditable="true">
+                    IDARG45980666<4<<<<<<<<<<<<<<<<<<br>
+                    0107998F201808ARG<<<<<<RABBIA<<<<<<<AGUSTIN<<<<<<<0<br>
+                    IGNACIO<<<<<RODRIGUEZ<<<<<MARIANA<<<<<
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>  
     function toggleEditMode() {  
         const body = document.body;  
@@ -654,7 +631,9 @@
             }  
             reader.readAsDataURL(file);  
         }  
-    }  function loadQR(event) {  
+    }  
+
+    function loadQR(event) {  
         const file = event.target.files[0];  
         if (file) {  
             const reader = new FileReader();  
@@ -686,15 +665,16 @@
             reader.readAsDataURL(file);  
         }  
     }  
+
     function loadFingerprint(event){
-    const file = event.target.files[0];
-    if(file){
-        const reader = new FileReader();
-        reader.onload=function(e){
-            document.getElementById("fingerprint-img").src=e.target.result;
-        };
-        reader.readAsDataURL(file);
-    }
+        const file = event.target.files[0];
+        if(file){
+            const reader = new FileReader();
+            reader.onload=function(e){
+                document.getElementById("fingerprint-img").src=e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
     }
 </script>  
 </body>  
