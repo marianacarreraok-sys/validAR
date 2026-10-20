@@ -543,4 +543,159 @@
 
                 <div class="field-group">
                     <label contenteditable="true">Disposición</label>
-                    <div class="val" contenteditable="true">5306</d
+                    <div class="val" contenteditable="true">5306</div>
+                </div>
+            </div>
+
+            <div class="row-data">
+                <div class="field-group">
+                    <label contenteditable="true">Radicación</label>
+                    <div class="val" contenteditable="true">29 MAY 2012</div>
+                </div>
+
+                <div class="field-group">
+                    <label contenteditable="true">Vencimiento</label>
+                    <div class="val" contenteditable="true">29 MAY 2014</div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="fingerprint-box">
+            <img id="fingerprint-img" src="">
+        </div>
+
+    </div>
+
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;font-size:8px;">
+        <div contenteditable="true">
+            CPN Diego César Santilli<br>
+            Ministro del Interior
+        </div>
+
+        <div contenteditable="true">
+            CUIL: 27-99999999-0
+        </div>
+
+        <div contenteditable="true">
+            Trámite Nº: 00570060060
+        </div>
+    </div>
+
+    <div class="mrz" contenteditable="true">
+        IDARG45980666<4<<<<<<<<<<<<<<<<<<br>
+        0107998F201808ARG<<<<<<RABBIA<<<<<<<AGUSTIN<<<<<<<0<br>
+        IGNACIO<<<<<RODRIGUEZ<<<<<MARIANA<<<<<
+    </div>
+
+                    </div>
+<script>  
+    function toggleEditMode() {  
+        const body = document.body;  
+        if (body.classList.contains('editing')) {  
+            body.classList.remove('editing');  
+            alert('Modo edición BLOQUEADO. Las líneas punteadas desaparecen para una vista natural y lista para la descarga.');  
+        } else {  
+            body.classList.add('editing');  
+            alert('Modo edición DESBLOQUEADO.');  
+        }  
+    }  
+
+    function downloadPNG(elementId, filename) {  
+        const wasEditing = document.body.classList.contains('editing');  
+        if (wasEditing) {  
+            document.body.classList.remove('editing');  
+        }  
+
+        const element = document.getElementById(elementId);  
+        
+        html2canvas(element, { scale: 3, useCORS: true, logging: false }).then(canvas => {  
+            const link = document.createElement('a');  
+            link.download = filename;  
+            link.href = canvas.toDataURL('image/png');  
+            link.click();  
+
+            if (wasEditing) {  
+                document.body.classList.add('editing');  
+            }  
+        });  
+    }  
+
+    function loadEscudo(event) {  
+        const file = event.target.files[0];  
+        if (file) {  
+            const reader = new FileReader();  
+            reader.onload = function(e) {  
+                document.getElementById('escudo-img').src = e.target.result;  
+            }  
+            reader.readAsDataURL(file);  
+        }  
+    }  
+
+    function loadMainPhoto(event) {  
+        const file = event.target.files[0];  
+        if (file) {  
+            const reader = new FileReader();  
+            reader.onload = function(e) {  
+                document.getElementById('main-photo').src = e.target.result;  
+            }  
+            reader.readAsDataURL(file);  
+        }  
+    }  
+
+    function loadSignature(event) {  
+        const file = event.target.files[0];  
+        if (file) {  
+            const reader = new FileReader();  
+            reader.onload = function(e) {  
+                const sigImg = document.getElementById('signature-img');  
+                sigImg.src = e.target.result;  
+                sigImg.style.display = 'block';  
+            }  
+            reader.readAsDataURL(file);  
+        }  
+    }  function loadQR(event) {  
+        const file = event.target.files[0];  
+        if (file) {  
+            const reader = new FileReader();  
+            reader.onload = function(e) {  
+                document.getElementById('qr-img').src = e.target.result;  
+            }  
+            reader.readAsDataURL(file);  
+        }  
+    }  
+
+    function loadBgFront(event) {  
+        const file = event.target.files[0];  
+        if (file) {  
+            const reader = new FileReader();  
+            reader.onload = function(e) {  
+                document.getElementById('card-front-bg').style.backgroundImage = `url('${e.target.result}')`;  
+            }  
+            reader.readAsDataURL(file);  
+        }  
+    }  
+
+    function loadBgBack(event) {  
+        const file = event.target.files[0];  
+        if (file) {  
+            const reader = new FileReader();  
+            reader.onload = function(e) {  
+                document.getElementById('card-back-bg').style.backgroundImage = `url('${e.target.result}')`;  
+            }  
+            reader.readAsDataURL(file);  
+        }  
+    }  
+    function loadFingerprint(event){
+    const file = event.target.files[0];
+    if(file){
+        const reader = new FileReader();
+        reader.onload=function(e){
+            document.getElementById("fingerprint-img").src=e.target.result;
+        };
+        reader.readAsDataURL(file);
+    }
+    }
+</script>  
+</body>  
+</html>
