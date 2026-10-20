@@ -1,0 +1,546 @@
+<!DOCTYPE html>  
+<html lang="es">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <title>Recreación DNI Digital - Profesional</title>  
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">  
+    <!-- Cambiamos a html2canvas para la exportación en PNG -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>  
+    <style>  
+        :root {  
+            --primary-color: #0077c8;  
+        }  
+        body {  
+            font-family: 'Montserrat', Arial, sans-serif;  
+            background-color: #12161c;  
+            color: #ffffff;  
+            margin: 0;  
+            padding: 20px;  
+            display: flex;  
+            flex-direction: column;  
+            align-items: center;  
+        }  
+        .controls {  
+            margin-bottom: 20px;  
+            background: #21262d;  
+            padding: 15px 25px;  
+            border-radius: 8px;  
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);  
+            display: flex;  
+            flex-wrap: wrap;  
+            gap: 15px;  
+            align-items: center;  
+            max-width: 920px;  
+        }  
+        .control-group {  
+            display: flex;  
+            flex-direction: column;  
+            gap: 4px;  
+            font-size: 11px;  
+            color: #8b949e;  
+        }  
+        .control-group input[type="file"] {  
+            color: #fff;  
+            font-size: 11px;  
+        }  
+        .btn {  
+            background-color: #238636;  
+            color: white;  
+            border: none;  
+            padding: 8px 16px;  
+            font-size: 13px;  
+            font-weight: bold;  
+            border-radius: 6px;  
+            cursor: pointer;  
+            transition: background 0.2s;  
+        }  
+        .btn:hover { background-color: #2ea043; }  
+        .toggle-edit-btn {  
+            background-color: #1f6feb;  
+        }  
+        .toggle-edit-btn:hover { background-color: #388bfd; }  
+
+        .app-container {  
+            background-color: #1e242b;  
+            border-radius: 12px;  
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);  
+            width: 920px;  
+            overflow: hidden;  
+            border: 1px solid #30363d;  
+        }  
+
+        .dni-view-area {  
+            padding: 30px;  
+            background: #12161c;  
+            display: flex;  
+            flex-direction: column;  
+            align-items: center;  
+            gap: 20px;  
+        }  
+
+        .dni-cards-row {  
+            display: flex;  
+            gap: 30px;  
+            justify-content: center;  
+        }  
+
+        /* DNI Card Base Styling */  
+        .dni-card {  
+            width: 420px;  
+            height: 265px;  
+            background-size: cover;  
+            background-position: center;  
+            background-color: #bfe3ed;  
+            border-radius: 12px;  
+            position: relative;  
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);  
+            border: 1px solid #90c6d9;  
+            overflow: hidden;  
+            color: #0b2545;  
+            font-size: 11px;  
+        }  
+
+        /* Editable elements styling */  
+        .editing [contenteditable="true"] {  
+            border: 1px dashed #0077c8;  
+            background: rgba(255,255,255,0.7);  
+            border-radius: 3px;  
+            padding: 1px 3px;  
+        }  
+        [contenteditable="true"] {  
+            border: 1px dashed transparent;  
+            padding: 1px 3px;  
+            border-radius: 3px;  
+            transition: all 0.2s;  
+        }  
+
+        /* Front Card Specifics */  
+        .dni-front {  
+            padding: 10px 15px;  
+            box-sizing: border-box;  
+        }  
+        .dni-header {  
+            display: flex;  
+            align-items: center;  
+            justify-content: space-between;  
+            border-bottom: 1.5px solid #0b2545;  
+            padding-bottom: 4px;  
+            margin-bottom: 5px;  
+        }  
+        .escudo-box {  
+            width: 25px;  
+            height: 28px;  
+            display: flex;  
+            align-items: center;  
+            justify-content: center;  
+            overflow: hidden;  
+            cursor: pointer;  
+        }  
+        .escudo-box img {  
+            width: 100%;  
+            height: 100%;  
+            object-fit: contain;  
+        }  
+        .dni-header .title-text {  
+            font-size: 8px;  
+            font-weight: 900;  
+            color: #0b2545;  
+            letter-spacing: 0.8px;  
+        }  
+
+        .dni-header-textos {  
+            display: flex;  
+            flex-direction: column;  
+            line-height: 1.0;  
+        }  
+        .dni-header .main-sub {  
+            font-size: 6px;  
+            font-weight: 900;  
+            color: #0b2545;  
+            letter-spacing: 0.2px;  
+        }  
+        .dni-header .secondary-sub {  
+            font-size: 5px;  
+            font-weight: 700;  
+            color: #0b2545;  
+        }  
+        .dni-header .third-sub {  
+            font-size: 4px;  
+            font-weight: 700;  
+            color: #0b2545;  
+        }  
+
+        .dni-body {  
+            display: flex;  
+            gap: 10px;  
+            position: relative;  
+        }  
+
+        .photo-column {  
+            display: flex;  
+            flex-direction: column;  
+            align-items: center;  
+            gap: 4px;  
+            width: 105px;  
+            flex-shrink: 0;
+            margin-top: 5px;
+        }  
+
+        .photo-box {  
+            width: 105px;  
+            height: 120px;  
+            background: transparent;  
+            border: none;  
+            overflow: hidden;  
+        }  
+
+        .photo-box img {  
+            width: 100%;  
+            height: 100%;  
+            object-fit: cover;  
+        }  
+
+        .fields-column {  
+            display: flex;  
+            flex-direction: column;  
+            gap: 1px;  
+            flex-grow: 1;  
+        }  
+
+        .field-group label {  
+            display: block;  
+            font-size: 4.5px;  
+            color: #0b2545;  
+            text-transform: uppercase;  
+            font-weight: 700;  
+        }  
+        .field-group .val {  
+            font-size: 7.5px;  
+            font-weight: 700;  
+            color: #0b2545;  
+        }  
+
+        .row-fields {  
+            display: flex;  
+            gap: 10px;  
+        }  
+
+        .signature-box {  
+            width: 130px;  
+            height: 25px;  
+        }  
+
+        .signature-box img {  
+            width: 100%;  
+            height: 100%;  
+            object-fit: contain;  
+        }  
+
+        .bottom-bar-horizontal {  
+            display: flex;  
+            align-items: flex-end;  
+            gap: 4px;  
+            margin-top: 2px;  
+        }  
+
+        .qr-horizontal {  
+            height: 35px;  
+            background: white;  
+            padding: 1px;  
+            border: 1px solid #ccc;  
+            width: 140px;
+            margin-left: 15px;
+            flex-shrink: 0;  
+            display: flex;  
+            align-items: center;  
+            justify-content: center;  
+            overflow: hidden;  
+        }  
+        .qr-horizontal img {  
+            width: 100%;  
+            height: 100%;  
+            object-fit: fill;  
+        }  
+
+        /* Back Card Specifics */  
+        .dni-back {  
+            padding: 12px 15px;  
+            box-sizing: border-box;  
+            display: flex;  
+            flex-direction: column;  
+            justify-content: space-between;  
+        }  
+
+        .back-top {  
+            display: flex;  
+            justify-content: space-between;  
+            align-items: flex-start;  
+        }  
+
+        .back-fields {  
+            font-size: 10px;  
+            display: flex;  
+            flex-direction: column;  
+            gap: 8px;  
+        }  
+
+        .qr-code {  
+            width: 75px;  
+            height: 75px;  
+            background: white;  
+            padding: 3px;  
+            border: 1px solid #ccc;  
+            overflow: hidden;  
+        }  
+        .qr-code img {  
+            width: 100%;  
+            height: 100%;  
+            object-fit: contain;  
+        }  
+
+        .mrz {  
+            font-family: 'Share Tech Mono', monospace;  
+            font-size: 11.5px;  
+            font-weight: 700;  
+            letter-spacing: 1.2px;  
+            color: #0b2545;  
+            background: rgba(255,255,255,0.5);  
+            padding: 4px;  
+            border-radius: 4px;  
+        }
+        #dniSerial {
+            position: absolute;
+            top: 20px;
+            right: -30px;
+            transform: rotate(-90deg);
+            font-family: "Share Tech Mono", monospace;
+            font-size: 7px;
+            font-weight: 700;
+            color: #0b2545;
+            letter-spacing: 1px;
+            white-space: nowrap;
+        }
+
+        .editing #dniSerial {
+            border: 1px dashed #0077c8;
+            background: rgba(255,255,255,.3);
+        }
+        .back-extra{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:16px;
+    margin-top:10px;
+}
+
+.extra-fields{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    gap:2px;
+    font-size:8px;
+    font-weight:700;
+    color:#0b2545;
+}
+
+.row-data{
+    display:flex;
+    justify-content:space-between;
+    gap:18px;
+}
+
+.fingerprint-box{
+    width:82px;
+    height:105px;
+    border:1px solid #666;
+    background:#fff;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    overflow:hidden;
+    flex-shrink:0;
+}
+
+.fingerprint-box img{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+}
+    </style>  
+</head>  
+<body class="editing">  
+
+<!-- Controles visibles en pantalla -->  
+<div class="controls" id="panel-controles">  
+    <button class="btn toggle-edit-btn" onclick="toggleEditMode()">Bloquear / Desbloquear Edición</button>  
+    <button class="btn" onclick="downloadPNG('card-front-bg', 'dni_frente.png')">Descargar Frente (PNG)</button>  
+    <button class="btn" onclick="downloadPNG('card-back-bg', 'dni_dorso.png')">Descargar Dorso (PNG)</button>  
+      
+    <div class="control-group">  
+        <label>Escudo:</label>  
+        <input type="file" id="upload-escudo" accept="image/*" onchange="loadEscudo(event)">  
+    </div>  
+    <div class="control-group">  
+        <label>Foto Principal:</label>  
+        <input type="file" id="upload-photo" accept="image/*" onchange="loadMainPhoto(event)">  
+    </div>  
+    <div class="control-group">  
+        <label>Firma:</label>  
+        <input type="file" id="upload-signature" accept="image/*" onchange="loadSignature(event)">  
+    </div>  
+    <div class="control-group">  
+        <label>Código QR Horizontal:</label>  
+        <input type="file" id="upload-qr" accept="image/*" onchange="loadQR(event)">  
+    </div>  
+    <div class="control-group">  
+        <label>Fondo Frente:</label>  
+        <input type="file" id="upload-bg-front" accept="image/*" onchange="loadBgFront(event)">  
+    </div>  
+    <div class="control-group">  
+        <label>Fondo Dorso:</label>  
+        <input type="file" id="upload-bg-back" accept="image/*" onchange="loadBgBack(event)">  
+    <div class="control-group">
+    <label>Huella Digital:</label>
+    <input type="file"
+           id="upload-fingerprint"
+           accept="image/*"
+           onchange="loadFingerprint(event)">
+    </div>
+    </div>  
+</div>  
+
+<!-- Contenedor exclusivo para los carnets -->  
+<div class="app-container" id="dni-app-capture">  
+    <div class="dni-view-area">  
+        <div class="dni-cards-row">  
+              
+            <!-- TARJETA FRENTE -->  
+            <div class="dni-card dni-front" id="card-front-bg">  
+                <div class="dni-header">  
+                    <div style="display:flex; align-items: center; gap: 6px;">  
+                        <div class="escudo-box" onclick="document.getElementById('upload-escudo').click()" title="Hacé clic para cambiar la imagen del escudo">  
+                            <img id="escudo-img" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%230b2545'><path d='M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3m0 2.18l7 2.33v4.99c0 4.54-3.2 8.82-7 9.88-3.8-1.06-7-5.34-7-9.88V7.51l7-2.33z'/></svg>" alt="Escudo">  
+                        </div>  
+                        <div class="dni-header-textos">  
+                            <div class="main-sub" contenteditable="true">REPÚBLICA ARGENTINA - MERCOSUR</div>  
+                            <div class="secondary-sub" contenteditable="true">REGISTRO NACIONAL DE LAS PERSONAS</div>  
+                            <div class="third-sub" contenteditable="true">MINISTERIO DEL INTERIOR</div>  
+                        </div>  
+                    </div>  
+                    <div class="title-text" contenteditable="true"></div>  
+                </div>  
+
+                <div class="dni-body">  
+                    <!-- Columna Izquierda: Foto Principal y Documento Centrado Abajo -->  
+                    <div class="photo-column">  
+                        <div class="photo-box">  
+                            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&auto=format&fit=crop&q=80" alt="Foto DNI" id="main-photo">  
+                        </div>  
+                        <div class="field-group" style="text-align: center; width: 100%;">  
+                            <label contenteditable="true" style="text-align: center;">Documento / Document</label>  
+                            <div class="val" style="font-size:14px; font-weight:900; text-align: center;" contenteditable="true">45.087.998</div>  
+                        </div>  
+                    </div>  
+
+                    <!-- Columna Derecha: Datos del carnet -->  
+                    <div class="fields-column">  
+                        <div class="field-group">  
+                            <label contenteditable="true">Apellido / Surname</label>  
+                            <div class="val" contenteditable="true">RABBIA</div>  
+                        </div>  
+                        <div class="field-group">  
+                            <label contenteditable="true">Nombre / Name</label>  
+                            <div class="val" contenteditable="true">AGUSTIN IGNACIO</div>  
+                        </div>  
+                        <div class="row-fields">  
+                            <div class="field-group" style="flex:1;">  
+                                <label contenteditable="true">Sexo / Sex</label>  
+                                <div class="val" contenteditable="true">M</div>  
+                            </div>  
+                            <div class="field-group" style="flex:2.5;">  
+                                <label contenteditable="true">Nacionalidad / Nationality</label>  
+                                <div class="val" contenteditable="true">ARGENTINA</div>  
+                            </div>  
+                            <div class="field-group" style="flex:1;">  
+                                <label contenteditable="true">Ejemplar</label>  
+                                <div class="val" contenteditable="true">A</div>  
+                            </div>  
+                        </div>  
+                        <div class="field-group">  
+                            <label contenteditable="true">Fecha de nacimiento / Date of birth</label>  
+                            <div class="val" style="font-size:9px;" contenteditable="true">30 SET/ SET 2003</div>  
+                        </div>  
+                        <div class="field-group">  
+                            <label contenteditable="true">Fecha de emisión / Date of issue</label>  
+                            <div class="val" style="font-size:9px;" contenteditable="true">21 AGO/ AUG 2014</div>  
+                        </div>  
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start;">  
+                            <div class="field-group" style="flex: 1;">  
+                                <label contenteditable="true">Fecha de vencimiento / Date of expiry</label>  
+                                <div class="val" style="font-size:9px;" contenteditable="true">30 SET/ SET 2018</div>  
+                            </div>  
+                            <div class="field-group" style="flex: 1; text-align: left;">  
+                                <label contenteditable="true">FIRMA IDENTIFICADO / SIGNATURE</label>  
+                                <div class="signature-box">  
+                                    <img id="signature-img" src="" alt="" style="display:none;">  
+                                </div>  
+                            </div>  
+                        </div>  
+                    </div>  
+                    <div id="dniSerial" contenteditable="true">123456789</div>  
+                </div>  
+
+                <!-- Barra inferior con Trámite y Código QR horizontal -->  
+                <div class="bottom-bar-horizontal">  
+                    <div class="field-group" style="width: 120px; flex-shrink: 0; margin-left: 115px;">  
+                        <label contenteditable="true">Trámite N° / Of. ident.</label>  
+                        <div class="val" style="font-size:7px;" contenteditable="true">00290682655</div>  
+                        <div class="val" style="font-size:7px;" contenteditable="true">7142</div>  
+                    </div>  
+                    <div class="qr-horizontal">  
+                        <img id="qr-img" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 20' fill='black'><rect width='5' height='20'/><rect x='8' width='2' height='20'/><rect x='13' width='8' height='20'/><rect x='24' width='3' height='20'/><rect x='30' width='12' height='20'/><rect x='45' width='4' height='20'/><rect x='52' width='10' height='20'/><rect x='65' width='5' height='20'/><rect x='73' width='8' height='20'/><rect x='84' width='3' height='20'/><rect x='90' width='10' height='20'/></svg>" alt="QR Horizontal">  
+                    </div>  
+                </div>  
+            </div>  
+
+            <!-- TARJETA DORSO -->
+<div class="dni-card dni-back" id="card-back-bg">
+
+    <div class="back-extra">
+
+        <div class="extra-fields">
+
+            <div class="field-group">
+                <label contenteditable="true">Domicilio</label>
+                <div class="val" contenteditable="true">
+                    San Martín N° 2538 - Cañuelas
+                </div>
+            </div>
+
+            <div class="field-group">
+                <label contenteditable="true">Lugar de nacimiento</label>
+                <div class="val" contenteditable="true">
+                    Provincia de Buenos Aires
+                </div>
+            </div>
+
+            <div class="field-group">
+                <label contenteditable="true">Ingreso al país</label>
+                <div class="val" contenteditable="true">12 ABR 2012</div>
+            </div>
+
+            <div class="field-group">
+                <label contenteditable="true">Categoría</label>
+                <div class="val" contenteditable="true">TEMPORARIA</div>
+            </div>
+
+            <div class="row-data">
+                <div class="field-group">
+                    <label contenteditable="true">Expediente</label>
+                    <div class="val" contenteditable="true">5274201</div>
+                </div>
+
+                <div class="field-group">
+                    <label contenteditable="true">Disposición</label>
+                    <div class="val" contenteditable="true">5306</d
