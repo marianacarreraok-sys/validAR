@@ -238,7 +238,7 @@
             transform: translateY(-3px);
         }
 
-        /* --- SERVICIOS --- */
+        /* --- SERVICIOS CON IMÁGENES --- */
         .section-title {
             text-align: center;
             margin-bottom: 50px;
@@ -272,10 +272,10 @@
         .service-card {
             background-color: var(--light-bg);
             border-radius: 12px;
-            padding: 35px 25px;
-            text-align: center;
+            overflow: hidden;
             border-bottom: 4px solid var(--primary);
             transition: all 0.3s ease;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
         }
 
         .service-card:hover {
@@ -283,19 +283,36 @@
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
         }
 
-        .service-card i {
-            font-size: 3rem;
-            color: var(--primary);
-            margin-bottom: 20px;
+        .service-img-container {
+            width: 100%;
+            height: 200px;
+            overflow: hidden;
+            background-color: #e2e8f0;
         }
 
-        .service-card h4 {
+        .service-img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .service-card:hover .service-img-container img {
+            transform: scale(1.05);
+        }
+
+        .service-content {
+            padding: 25px 20px;
+            text-align: center;
+        }
+
+        .service-content h4 {
             font-size: 1.3rem;
             margin-bottom: 12px;
             color: var(--secondary);
         }
 
-        .service-card p {
+        .service-content p {
             color: var(--text-muted);
             font-size: 0.95rem;
         }
@@ -496,43 +513,80 @@
         </div>
     </section>
 
-    <!-- SERVICIOS -->
+    <!-- SERVICIOS CON IMÁGENES -->
     <section class="services" id="servicios">
         <div class="section-title">
             <h3>Nuestros Servicios de Auxilio</h3>
             <p>Especialistas en la transportación y asistencia de todo tipo de unidades</p>
         </div>
         <div class="services-grid">
+
+            <!-- Card 1: Vehículos Livianos -->
             <div class="service-card">
-                <i class="fa-solid fa-car-side"></i>
-                <h4>Vehículos Livianos</h4>
-                <p>Traslados de autos, camionetas, utilitarios y SUVs por desperfectos mecánicos o siniestros.</p>
+                <div class="service-img-container">
+                    <img src="https://i.postimg.cc/gc4V8BYr/IMG-20261021-WA0033.jpg" alt="Vehículos Livianos" id="img-livianos">
+                </div>
+                <div class="service-content">
+                    <h4>Vehículos Livianos</h4>
+                    <p>Traslados de autos, camionetas, utilitarios y SUVs por desperfectos mecánicos o siniestros.</p>
+                </div>
             </div>
+
+            <!-- Card 2: Vehículos Pesados -->
             <div class="service-card">
-                <i class="fa-solid fa-truck"></i>
-                <h4>Vehículos Pesados</h4>
-                <p>Equipamiento preparado para el auxilio y remolque de combis, colectivos y camiones pequeños.</p>
+                <div class="service-img-container">
+                    <img src="https://i.postimg.cc/jdwD28Ct/IMG-20261021-WA0036.jpg" alt="Vehículos Pesados" id="img-pesados">
+                </div>
+                <div class="service-content">
+                    <h4>Vehículos Pesados</h4>
+                    <p>Equipamiento preparado para el auxilio y remolque de combis, colectivos y camiones pequeños.</p>
+                </div>
             </div>
+
+            <!-- Card 3: Maquinaria Especial -->
             <div class="service-card">
-                <i class="fa-solid fa-tractor"></i>
-                <h4>Maquinaria Especial</h4>
-                <p>Transporte especializado para maquinaria agrícola, industrial, elevadores y autoelevadores.</p>
+                <div class="service-img-container">
+                    <img src="https://i.postimg.cc/HLBYB5jz/IMG-20261021-WA0037.jpg" alt="Maquinaria Especial" id="img-maquinaria">
+                </div>
+                <div class="service-content">
+                    <h4>Maquinaria Especial</h4>
+                    <p>Transporte especializado para maquinaria agrícola, industrial, elevadores y autoelevadores.</p>
+                </div>
             </div>
+
+            <!-- Card 4: Auxilio Mecánico Rápido -->
             <div class="service-card">
-                <i class="fa-solid fa-battery-quarter"></i>
-                <h4>Auxilio Mecánico Rápido</h4>
-                <p>Asistencia in situ para carga/cambio de baterías, arranque y cambio de neumáticos ponchados.</p>
+                <div class="service-img-container">
+                    <img src="https://i.postimg.cc/sxZ3jNm8/IMG-20261021-WA0035.jpg" alt="Auxilio Mecánico Rápido" id="img-auxilio">
+                </div>
+                <div class="service-content">
+                    <h4>Auxilio Mecánico Rápido</h4>
+                    <p>Asistencia in situ para carga/cambio de baterías, arranque y cambio de neumáticos ponchados.</p>
+                </div>
             </div>
+
+            <!-- Card 5: Traslado de Motos -->
             <div class="service-card">
-                <i class="fa-solid fa-motorcycle"></i>
-                <h4>Traslado de Motos</h4>
-                <p>Sistemas de amarre seguro para todo tipo de cilindradas, garantizando cero rayones.</p>
+                <div class="service-img-container">
+                    <img src="https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&q=80&w=600" alt="Traslado de Motos" id="img-motos">
+                </div>
+                <div class="service-content">
+                    <h4>Traslado de Motos</h4>
+                    <p>Sistemas de amarre seguro para todo tipo de cilindradas, garantizando cero rayones.</p>
+                </div>
             </div>
+
+            <!-- Card 6: Larga Distancia -->
             <div class="service-card">
-                <i class="fa-solid fa-route"></i>
-                <h4>Larga Distancia</h4>
-                <p>Viajes programados a todo el país con la máxima seguridad y cobertura.</p>
+                <div class="service-img-container">
+                    <img src="https://images.unsplash.com/photo-1506015391300-4802dc74de2e?auto=format&fit=crop&q=80&w=600" alt="Larga Distancia" id="img-largadistancia">
+                </div>
+                <div class="service-content">
+                    <h4>Larga Distancia</h4>
+                    <p>Viajes programados a todo el país con la máxima seguridad y cobertura.</p>
+                </div>
             </div>
+
         </div>
     </section>
 
@@ -640,4 +694,4 @@
         });
     </script>
 </body>
-</html>
+    </html>
