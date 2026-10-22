@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Remolques Leo | Auxilio Mecánico y Traslados 24hs</title>
+    
+    <!-- Fuentes e Iconos -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #f59e0b;        /* Amarillo/Ámbar de Auxilio */
+            --primary-dark: #d97706;   /* Ámbar Oscuro */
+            --secondary: #0f172a;      /* Azul Noche / Slate Muy Oscuro */
+            --dark-card: #1e293b;      /* Slate Medio */
+            --light-bg: #f8fafc;       /* Fondo Claro */
+            --text-dark: #0f172a;
+            --text-muted: #64748b;
+            --white: #ffffff;
+            --whatsapp-green: #25D366;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        h1, h2, h3, h4, .brand-font {
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        body {
+            color: var(--text-dark);
+            background-color: var(--light-bg);
+            line-height: 1.6;
+        }
+
+        /* --- BARRA TOP DE EMERGENCIA --- */
+        .top-bar {
+            background-color: var(--secondary);
+            color: var(--white);
+            padding: 8px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+            border-bottom: 3px solid var(--primary);
+        }
+
+        .top-info {
+            display: flex;
+            gap: 20px;
+        }
+
+        .top-info span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .top-info i {
+            color: var(--primary);
+        }
+
+        .badge-24hs {
+            background-color: #ef4444;
+            color: var(--white);
+            font-weight: 800;
+            padding: 2px 10px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+
+        /* --- NAVBAR --- */
+        .navbar {
+            background-color: var(--white);
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: var(--secondary);
+        }
+
+        .logo i {
+            font-size: 2.2rem;
+            color: var(--primary);
+        }
+
+        .logo-text h1 {
+            font-size: 1.6rem;
+            font-weight: 900;
+            line-height: 1;
+            text-transform: uppercase;
+            letter-spacing: -0.5px;
+        }
+
+        .logo-text span {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--secondary);
+            font-weight: 700;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-dark);
+        }
+
+        .btn-call {
+            background-color: var(--primary);
+            color: var(--secondary);
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-call:hover {
+            background-color: var(--primary-dark);
+            color: var(--white);
+            transform: translateY(-2px);
+        }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            background: linear-gradient(rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.9)), url('https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&q=80&w=1600') center/cover no-repeat;
+            color: var(--white);
+            padding: 90px 5%;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 850px;
+            margin: 0 auto;
+        }
+
+        .hero h2 {
+            font-size: 3rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            line-height: 1.15;
+        }
+
+        .hero h2 span {
+            color: var(--primary);
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            margin-bottom: 35px;
+            color: #cbd5e1;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-lg {
+            padding: 16px 32px;
+            font-size: 1.1rem;
+            border-radius: 8px;
+            font-weight: 800;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s;
+        }
+
+        .btn-ws {
+            background-color: var(--whatsapp-green);
+            color: var(--white);
+        }
+
+        .btn-ws:hover {
+            background-color: #1eb956;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px -5px rgba(37, 211, 102, 0.4);
+        }
+
+        .btn-outline {
+            border: 2px solid var(--white);
+            color: var(--white);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--white);
+            color: var(--secondary);
+            transform: translateY(-3px);
+        }
+
+        /* --- SERVICIOS --- */
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-title h3 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--secondary);
+            text-transform: uppercase;
+        }
+
+        .section-title p {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+        }
+
+        .services {
+            padding: 80px 5%;
+            background-color: var(--white);
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .service-card {
+            background-color: var(--light-bg);
+            border-radius: 12px;
+            padding: 35px 25px;
+            text-align: center;
+            border-bottom: 4px solid var(--primary);
+            transition: all 0.3s ease;
+        }
+
+        .service-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .service-card i {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .service-card h4 {
+            font-size: 1.3rem;
+            margin-bottom: 12px;
+            color: var(--secondary);
+        }
+
+        .service-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* --- COTIZADOR EN VIVO --- */
+        .calculator-section {
+            padding: 80px 5%;
+            background-color: var(--secondary);
+            color: var(--white);
+        }
+
+        .calculator-card {
+            max-width: 700px;
+            margin: 0 auto;
+            background-color: var(--dark-card);
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #e2e8f0;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 8px;
+            border: 1px solid #475569;
+            background-color: #0f172a;
+            color: var(--white);
+            font-size: 1rem;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        /* --- COBERTURA --- */
+        .coverage {
+            padding: 80px 5%;
+            background-color: var(--light-bg);
+            text-align: center;
+        }
+
+        .coverage-box {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .location-tag {
+            background-color: var(--white);
+            color: var(--secondary);
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-weight: 700;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .location-tag i {
+            color: var(--primary);
+        }
+
+        /* --- CONTACTO / FOOTER --- */
+        footer {
+            background-color: #090d16;
+            color: var(--white);
+            padding: 60px 5% 20px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto 40px;
+        }
+
+        .footer-col h4 {
+            font-size: 1.2rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .footer-col p {
+            color: #94a3b8;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            border-top: 1px solid #1e293b;
+            padding-top: 25px;
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        /* --- BOTÓN FLOTANTE WHATSAPP --- */
+        .float-ws {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background-color: var(--whatsapp-green);
+            color: var(--white);
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2.2rem;
+            box-shadow: 0 10px 25px rgba(37, 211, 102, 0.5);
+            z-index: 10000;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .float-ws:hover {
+            transform: scale(1.1);
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 768px) {
+            .top-bar { flex-direction: column; gap: 8px; text-align: center; }
+            .top-info { flex-direction: column; gap: 5px; }
+            .hero h2 { font-size: 2rem; }
+            .nav-links { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- BARRA DE EMERGENCIA SUPERIOR -->
+    <div class="top-bar">
+        <div class="top-info">
+            <span><i class="fa-solid fa-phone-volume"></i> <strong>Urgencias 24hs:</strong> 11 4440-6075</span>
+            <span><i class="fa-solid fa-location-dot"></i> Alvear 1300 - Monte Grande</span>
+        </div>
+        <div>
+            <span class="badge-24hs"><i class="fa-solid fa-clock"></i> Guardia Activa 24/7</span>
+        </div>
+    </div>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <a href="#" class="logo">
+            <i class="fa-solid fa-truck-pickup"></i>
+            <div class="logo-text">
+                <h1>REMOLQUES LEO</h1>
+                <span>AUXILIO MECÁNICO VIAL</span>
+            </div>
+        </a>
+        <ul class="nav-links">
+            <li><a href="#servicios">Servicios</a></li>
+            <li><a href="#cotizador">Solicitar Auxilio</a></li>
+            <li><a href="#cobertura">Cobertura</a></li>
+            <li><a href="#contacto">Contacto</a></li>
+        </ul>
+        <a href="tel:1144406075" class="btn-call">
+            <i class="fa-solid fa-phone"></i> LLAMAR AHORA
+        </a>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section class="hero">
+        <div class="hero-content">
+            <h2>Remolques y Auxilio Mecánico <span>las 24 Horas</span></h2>
+            <p>Traslados seguros de vehículos livianos, pesados y maquinaria especial. Respuesta rápida y atención profesional donde estés.</p>
+            <div class="hero-buttons">
+                <a href="https://wa.me/5491144406075?text=Hola%20Remolques%20Leo,%20necesito%20un%20auxilio%20urgente" class="btn-lg btn-ws" target="_blank">
+                    <i class="fa-brands fa-whatsapp"></i> PEDIR GRÚA POR WHATSAPP
+                </a>
+                <a href="tel:1144406075" class="btn-lg btn-outline">
+                    <i class="fa-solid fa-phone"></i> 11 4440-6075
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- SERVICIOS -->
+    <section class="services" id="servicios">
+        <div class="section-title">
+            <h3>Nuestros Servicios de Auxilio</h3>
+            <p>Especialistas en la transportación y asistencia de todo tipo de unidades</p>
+        </div>
+        <div class="services-grid">
+            <div class="service-card">
+                <i class="fa-solid fa-car-side"></i>
+                <h4>Vehículos Livianos</h4>
+                <p>Traslados de autos, camionetas, utilitarios y SUVs por desperfectos mecánicos o siniestros.</p>
+            </div>
+            <div class="service-card">
+                <i class="fa-solid fa-truck"></i>
+                <h4>Vehículos Pesados</h4>
+                <p>Equipamiento preparado para el auxilio y remolque de combis, colectivos y camiones pequeños.</p>
+            </div>
+            <div class="service-card">
+                <i class="fa-solid fa-tractor"></i>
+                <h4>Maquinaria Especial</h4>
+                <p>Transporte especializado para maquinaria agrícola, industrial, elevadores y autoelevadores.</p>
+            </div>
+            <div class="service-card">
+                <i class="fa-solid fa-battery-quarter"></i>
+                <h4>Auxilio Mecánico Rápido</h4>
+                <p>Asistencia in situ para carga/cambio de baterías, arranque y cambio de neumáticos ponchados.</p>
+            </div>
+            <div class="service-card">
+                <i class="fa-solid fa-motorcycle"></i>
+                <h4>Traslado de Motos</h4>
+                <p>Sistemas de amarre seguro para todo tipo de cilindradas, garantizando cero rayones.</p>
+            </div>
+            <div class="service-card">
+                <i class="fa-solid fa-route"></i>
+                <h4>Larga Distancia</h4>
+                <p>Viajes programados a todo el país con la máxima seguridad y cobertura.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- COTIZADOR RÁPIDO WHATSAPP -->
+    <section class="calculator-section" id="cotizador">
+        <div class="section-title">
+            <h3 style="color: white;">Pedí tu Cotización en el Acto</h3>
+            <p style="color: #94a3b8;">Completá los datos y enviás la solicitud directa por WhatsApp</p>
+        </div>
+        <div class="calculator-card">
+            <form id="quoteForm">
+                <div class="form-group">
+                    <label><i class="fa-solid fa-car"></i> Tipo de Vehículo</label>
+                    <select class="form-control" id="tipoVehiculo" required>
+                        <option value="Auto / Utilitario">Auto / Suv / Utilitario</option>
+                        <option value="Camioneta 4x4 / Combi">Camioneta 4x4 / Combi</option>
+                        <option value="Vehículo Pesado">Camión / Pesado</option>
+                        <option value="Maquinaria Especial">Maquinaria Especial</option>
+                        <option value="Moto">Moto</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label><i class="fa-solid fa-location-arrow"></i> ¿Dónde estás varado? (Origen)</label>
+                    <input type="text" class="form-control" id="origen" placeholder="Ej: Monte Grande / San Martín / Ruta 8 km 25" required>
+                </div>
+                <div class="form-group">
+                    <label><i class="fa-solid fa-flag-checkered"></i> ¿A dónde va el vehículo? (Destino)</label>
+                    <input type="text" class="form-control" id="destino" placeholder="Ej: Taller en Devoto / Domicilio particular" required>
+                </div>
+                <div class="form-group">
+                    <label><i class="fa-solid fa-triangle-exclamation"></i> Estado del Vehículo / Motivo</label>
+                    <input type="text" class="form-control" id="motivo" placeholder="Ej: Se paró el motor, falta de rueda, chocado, etc.">
+                </div>
+                <button type="submit" class="btn-lg btn-ws" style="width: 100%; justify-content: center; border: none; cursor: pointer; margin-top: 10px;">
+                    <i class="fa-brands fa-whatsapp"></i> ENVIAR SOLICITUD POR WHATSAPP
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <!-- COBERTURA -->
+    <section class="coverage" id="cobertura">
+        <div class="section-title">
+            <h3>Área de Cobertura</h3>
+            <p>Atención prioritaria y traslado rápido en GBA y CABA</p>
+        </div>
+        <div class="coverage-box">
+            <div class="location-tag"><i class="fa-solid fa-location-dot"></i> Monte Grande</div>
+            <div class="location-tag"><i class="fa-solid fa-location-dot"></i> San Martín</div>
+            <div class="location-tag"><i class="fa-solid fa-location-dot"></i> Tres de Febrero</div>
+            <div class="location-tag"><i class="fa-solid fa-location-dot"></i> Gran Buenos Aires (GBA)</div>
+            <div class="location-tag"><i class="fa-solid fa-location-dot"></i> Ciudad de Buenos Aires (CABA)</div>
+            <div class="location-tag"><i class="fa-solid fa-location-dot"></i> Viajes a Todo el País</div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer id="contacto">
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h4>REMOLQUES LEO</h4>
+                <p>Servicios profesionales de remolque, auxilio mecánico y traslado de maquinarias las 24 horas del día.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Contacto Directo</h4>
+                <p><i class="fa-solid fa-phone" style="color: var(--primary);"></i> 11 4440-6075</p>
+                <p><i class="fa-brands fa-whatsapp" style="color: var(--whatsapp-green);"></i> +54 9 11 4440-6075</p>
+                <p><i class="fa-solid fa-envelope" style="color: var(--primary);"></i> Remolquesleo11@gmail.com</p>
+                <p><i class="fa-solid fa-location-dot" style="color: var(--primary);"></i> Alvear 1300 - Monte Grande</p>
+            </div>
+            <div class="footer-col">
+                <h4>Horarios de Atención</h4>
+                <p><i class="fa-solid fa-clock" style="color: var(--primary);"></i> Lunes a Domingos: 24 hs</p>
+                <p><i class="fa-solid fa-shield-halved" style="color: var(--primary);"></i> Guardias de emergencia activas</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Remolques Leo. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- BOTÓN FLOTANTE DE WHATSAPP -->
+    <a href="https://wa.me/5491144406075?text=Hola%20Remolques%20Leo,%20necesito%20asistencia%20mec%C3%A1nica" class="float-ws" target="_blank" title="Contactar por WhatsApp">
+        <i class="fa-brands fa-whatsapp"></i>
+    </a>
+
+    <!-- SCRIPT ENVÍO FORMULARIO A WHATSAPP -->
+    <script>
+        document.getElementById('quoteForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            var vehiculo = document.getElementById('tipoVehiculo').value;
+            var origen = document.getElementById('origen').value;
+            var destino = document.getElementById('destino').value;
+            var motivo = document.getElementById('motivo').value;
+
+            var mensaje = "Hola Remolques Leo! Quisiera consultar un presupuesto:\n\n" +
+                          "🚗 *Vehículo:* " + vehiculo + "\n" +
+                          "📍 *Origen:* " + origen + "\n" +
+                          "🏁 *Destino:* " + destino + "\n" +
+                          "⚠️ *Motivo/Estado:* " + (motivo ? motivo : "No especificado");
+
+            var url = "https://wa.me/5491144406075?text=" + encodeURIComponent(mensaje);
+            window.open(url, '_blank');
+        });
+    </script>
+</body>
+</html>
