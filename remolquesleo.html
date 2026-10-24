@@ -1,8 +1,9 @@
+```html
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
     <title>Remolques Leo | Traslados y Remolques 24hs</title>
     
     <!-- Fuentes e Iconos -->
@@ -22,6 +23,7 @@
             --text-muted: #64748b;
             --white: #ffffff;
             --whatsapp-green: #25D366;
+            --whatsapp-dark: #1eb956;
         }
 
         * {
@@ -29,6 +31,11 @@
             padding: 0;
             box-sizing: border-box;
             font-family: 'Open Sans', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html {
+            scroll-behavior: smooth;
         }
 
         h1, h2, h3, h4, .brand-font {
@@ -38,7 +45,9 @@
         body {
             color: var(--text-dark);
             background-color: var(--light-bg);
-            line-height: 1.6;
+            line-height: 1.5;
+            overflow-x: hidden;
+            padding-bottom: 70px; /* Espacio para barra de navegación inferior móvil si fuera necesaria */
         }
 
         /* --- BARRA TOP DE EMERGENCIA --- */
@@ -49,16 +58,20 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             border-bottom: 3px solid var(--primary);
         }
 
         .top-info {
             display: flex;
-            gap: 20px;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
         }
 
-        .top-info span {
+        .top-info a, .top-info span {
+            color: var(--white);
+            text-decoration: none;
             display: flex;
             align-items: center;
             gap: 6px;
@@ -72,28 +85,32 @@
             background-color: #ef4444;
             color: var(--white);
             font-weight: 800;
-            padding: 2px 10px;
+            padding: 3px 10px;
             border-radius: 20px;
             text-transform: uppercase;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             letter-spacing: 0.5px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
             animation: pulse 2s infinite;
+            white-space: nowrap;
         }
 
         @keyframes pulse {
             0% { opacity: 1; }
-            50% { opacity: 0.7; }
+            50% { opacity: 0.75; }
             100% { opacity: 1; }
         }
 
         /* --- NAVBAR --- */
         .navbar {
             background-color: var(--white);
-            padding: 15px 5%;
+            padding: 12px 5%;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
             position: sticky;
             top: 0;
             z-index: 1000;
@@ -108,12 +125,12 @@
         }
 
         .logo i {
-            font-size: 2.2rem;
+            font-size: 2rem;
             color: var(--primary);
         }
 
         .logo-text h1 {
-            font-size: 1.6rem;
+            font-size: 1.35rem;
             font-weight: 900;
             line-height: 1;
             text-transform: uppercase;
@@ -121,16 +138,18 @@
         }
 
         .logo-text span {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             color: var(--text-muted);
             font-weight: 700;
-            letter-spacing: 1px;
+            letter-spacing: 0.8px;
+            display: block;
+            margin-top: 2px;
         }
 
         .nav-links {
             display: flex;
             list-style: none;
-            gap: 25px;
+            gap: 20px;
             align-items: center;
         }
 
@@ -149,14 +168,16 @@
         .btn-call {
             background-color: var(--primary);
             color: var(--secondary);
-            padding: 10px 20px;
-            border-radius: 6px;
+            padding: 10px 18px;
+            border-radius: 8px;
             text-decoration: none;
             font-weight: 800;
-            display: flex;
+            display: inline-flex;
             align-items: center;
             gap: 8px;
             transition: all 0.3s ease;
+            font-size: 0.9rem;
+            white-space: nowrap;
         }
 
         .btn-call:hover {
@@ -165,26 +186,42 @@
             transform: translateY(-2px);
         }
 
+        /* Botón Hamburguesa */
+        .mobile-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--secondary);
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 6px;
+        }
+
+        .mobile-toggle:focus {
+            outline: 2px solid var(--primary);
+        }
+
         /* --- HERO SECTION --- */
         .hero {
-            background: linear-gradient(rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.9)), url('https://i.postimg.cc/QCvBqz0N/1792634625435.jpg') center/cover no-repeat;
+            background: linear-gradient(rgba(15, 23, 42, 0.88), rgba(15, 23, 42, 0.92)), url('https://i.postimg.cc/QCvBqz0N/1792634625435.jpg') center/cover no-repeat;
             color: var(--white);
-            padding: 90px 5%;
+            padding: 60px 5%;
             text-align: center;
             position: relative;
         }
 
         .hero-content {
-            max-width: 850px;
+            max-width: 800px;
             margin: 0 auto;
         }
 
         .hero h2 {
-            font-size: 3rem;
+            font-size: 2.2rem;
             font-weight: 900;
             text-transform: uppercase;
             margin-bottom: 15px;
-            line-height: 1.15;
+            line-height: 1.2;
         }
 
         .hero h2 span {
@@ -192,9 +229,12 @@
         }
 
         .hero p {
-            font-size: 1.25rem;
-            margin-bottom: 35px;
+            font-size: 1.1rem;
+            margin-bottom: 30px;
             color: #cbd5e1;
+            max-width: 650px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .hero-buttons {
@@ -205,15 +245,17 @@
         }
 
         .btn-lg {
-            padding: 16px 32px;
-            font-size: 1.1rem;
+            padding: 14px 24px;
+            font-size: 1rem;
             border-radius: 8px;
             font-weight: 800;
             text-decoration: none;
             display: inline-flex;
             align-items: center;
+            justify-content: center;
             gap: 10px;
             transition: all 0.3s;
+            min-height: 50px; /* Touch target optimizado */
         }
 
         .btn-ws {
@@ -222,9 +264,9 @@
         }
 
         .btn-ws:hover {
-            background-color: #1eb956;
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px -5px rgba(37, 211, 102, 0.4);
+            background-color: var(--whatsapp-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 18px rgba(37, 211, 102, 0.35);
         }
 
         .btn-outline {
@@ -235,36 +277,39 @@
         .btn-outline:hover {
             background-color: var(--white);
             color: var(--secondary);
-            transform: translateY(-3px);
+            transform: translateY(-2px);
         }
 
         /* --- SERVICIOS CON IMÁGENES --- */
         .section-title {
             text-align: center;
-            margin-bottom: 50px;
+            margin-bottom: 35px;
+            padding: 0 10px;
         }
 
         .section-title h3 {
-            font-size: 2.2rem;
+            font-size: 1.8rem;
             font-weight: 800;
             color: var(--secondary);
             text-transform: uppercase;
+            line-height: 1.25;
+            margin-bottom: 8px;
         }
 
         .section-title p {
             color: var(--text-muted);
-            font-size: 1.05rem;
+            font-size: 0.98rem;
         }
 
         .services {
-            padding: 80px 5%;
+            padding: 50px 5%;
             background-color: var(--white);
         }
 
         .services-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
+            gap: 25px;
             max-width: 1200px;
             margin: 0 auto;
         }
@@ -275,19 +320,22 @@
             overflow: hidden;
             border-bottom: 4px solid var(--primary);
             transition: all 0.3s ease;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
         }
 
         .service-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            transform: translateY(-5px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.1);
         }
 
         .service-img-container {
             width: 100%;
-            height: 200px;
+            height: 190px;
             overflow: hidden;
             background-color: #e2e8f0;
+            position: relative;
         }
 
         .service-img-container img {
@@ -302,56 +350,70 @@
         }
 
         .service-content {
-            padding: 25px 20px;
-            text-align: center;
+            padding: 20px;
+            text-align: left;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
         .service-content h4 {
-            font-size: 1.3rem;
-            margin-bottom: 12px;
+            font-size: 1.2rem;
+            margin-bottom: 8px;
             color: var(--secondary);
+            font-weight: 700;
         }
 
         .service-content p {
             color: var(--text-muted);
-            font-size: 0.95rem;
+            font-size: 0.92rem;
+            line-height: 1.5;
         }
 
         /* --- COTIZADOR EN VIVO --- */
         .calculator-section {
-            padding: 80px 5%;
+            padding: 50px 5%;
             background-color: var(--secondary);
             color: var(--white);
         }
 
         .calculator-card {
-            max-width: 700px;
+            max-width: 650px;
             margin: 0 auto;
             background-color: var(--dark-card);
-            padding: 40px;
+            padding: 25px;
             border-radius: 16px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
         }
 
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 18px;
         }
 
         .form-group label {
-            display: block;
+            display: flex;
+            align-items: center;
+            gap: 8px;
             margin-bottom: 8px;
             font-weight: 600;
             color: #e2e8f0;
+            font-size: 0.95rem;
+        }
+
+        .form-group label i {
+            color: var(--primary);
         }
 
         .form-control {
             width: 100%;
-            padding: 12px 15px;
+            padding: 14px 15px;
             border-radius: 8px;
             border: 1px solid #475569;
             background-color: #0f172a;
             color: var(--white);
-            font-size: 1rem;
+            font-size: 16px; /* Evita zoom automático en iPhones al enfocar */
+            transition: border-color 0.3s;
         }
 
         .form-control:focus {
@@ -359,9 +421,18 @@
             border-color: var(--primary);
         }
 
+        select.form-control {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23f59e0b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1.2em;
+            padding-right: 2.5rem;
+        }
+
         /* --- COBERTURA --- */
         .coverage {
-            padding: 80px 5%;
+            padding: 50px 5%;
             background-color: var(--light-bg);
             text-align: center;
         }
@@ -372,17 +443,18 @@
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 15px;
-            margin-top: 30px;
+            gap: 10px;
+            margin-top: 25px;
         }
 
         .location-tag {
             background-color: var(--white);
             color: var(--secondary);
-            padding: 12px 24px;
+            padding: 10px 18px;
             border-radius: 30px;
             font-weight: 700;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            font-size: 0.9rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.04);
             display: flex;
             align-items: center;
             gap: 8px;
@@ -397,70 +469,268 @@
         footer {
             background-color: #090d16;
             color: var(--white);
-            padding: 60px 5% 20px;
+            padding: 45px 5% 20px;
         }
 
         .footer-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 40px;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 30px;
             max-width: 1200px;
-            margin: 0 auto 40px;
+            margin: 0 auto 30px;
         }
 
         .footer-col h4 {
-            font-size: 1.2rem;
+            font-size: 1.15rem;
             color: var(--primary);
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             text-transform: uppercase;
+            font-weight: 800;
         }
 
-        .footer-col p {
+        .footer-col p, .footer-col a {
             color: #94a3b8;
             margin-bottom: 12px;
             display: flex;
             align-items: center;
             gap: 10px;
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+
+        .footer-col a:hover {
+            color: var(--white);
         }
 
         .footer-bottom {
             text-align: center;
             border-top: 1px solid #1e293b;
-            padding-top: 25px;
+            padding-top: 20px;
             color: #64748b;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
         }
 
         /* --- BOTÓN FLOTANTE WHATSAPP --- */
         .float-ws {
             position: fixed;
-            bottom: 25px;
-            right: 25px;
+            bottom: 20px;
+            right: 20px;
             background-color: var(--whatsapp-green);
             color: var(--white);
-            width: 65px;
-            height: 65px;
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 2.2rem;
-            box-shadow: 0 10px 25px rgba(37, 211, 102, 0.5);
+            font-size: 2rem;
+            box-shadow: 0 8px 20px rgba(37, 211, 102, 0.4);
             z-index: 10000;
             text-decoration: none;
             transition: all 0.3s;
         }
 
         .float-ws:hover {
-            transform: scale(1.1);
+            transform: scale(1.08);
         }
 
-        /* --- RESPONSIVE --- */
+        /* --- BARRA FIJA INFERIOR PARA MÓVILES (ACCESO RÁPIDO) --- */
+        .mobile-quick-bar {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--secondary);
+            border-top: 2px solid var(--primary);
+            z-index: 9999;
+            padding: 8px 12px;
+            box-shadow: 0 -4px 15px rgba(0,0,0,0.2);
+        }
+
+        .mobile-quick-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .mobile-quick-btn {
+            flex: 1;
+            padding: 10px;
+            border-radius: 6px;
+            text-align: center;
+            font-weight: 800;
+            font-size: 0.85rem;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .mobile-quick-btn.call {
+            background-color: var(--primary);
+            color: var(--secondary);
+        }
+
+        .mobile-quick-btn.ws {
+            background-color: var(--whatsapp-green);
+            color: var(--white);
+        }
+
+        /* --- MEDIA QUERIES PARA ADAPTABILIDAD MÓVIL --- */
+        @media (max-width: 992px) {
+            .hero h2 {
+                font-size: 2.2rem;
+            }
+        }
+
         @media (max-width: 768px) {
-            .top-bar { flex-direction: column; gap: 8px; text-align: center; }
-            .top-info { flex-direction: column; gap: 5px; }
-            .hero h2 { font-size: 2rem; }
-            .nav-links { display: none; }
+            body {
+                padding-bottom: 60px; /* Espacio para barra flotante móvil */
+            }
+
+            .top-bar {
+                flex-direction: column;
+                gap: 6px;
+                text-align: center;
+                padding: 8px 3%;
+            }
+
+            .top-info {
+                justify-content: center;
+                font-size: 0.8rem;
+                gap: 10px;
+            }
+
+            .badge-24hs {
+                font-size: 0.7rem;
+            }
+
+            .navbar {
+                padding: 10px 4%;
+            }
+
+            .logo i {
+                font-size: 1.8rem;
+            }
+
+            .logo-text h1 {
+                font-size: 1.2rem;
+            }
+
+            .nav-links {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background-color: var(--white);
+                flex-direction: column;
+                padding: 20px;
+                gap: 15px;
+                box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+                display: none; /* Controlado con JS */
+                border-top: 1px solid #e2e8f0;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .mobile-toggle {
+                display: block;
+            }
+
+            .btn-call.desktop-only {
+                display: none;
+            }
+
+            .hero {
+                padding: 45px 4%;
+            }
+
+            .hero h2 {
+                font-size: 1.65rem;
+            }
+
+            .hero p {
+                font-size: 0.95rem;
+                margin-bottom: 25px;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .btn-lg {
+                width: 100%;
+            }
+
+            .services {
+                padding: 40px 4%;
+            }
+
+            .section-title h3 {
+                font-size: 1.5rem;
+            }
+
+            .section-title p {
+                font-size: 0.9rem;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr; /* 1 Columna en teléfonos */
+                gap: 20px;
+            }
+
+            .service-img-container {
+                height: 180px;
+            }
+
+            .calculator-section {
+                padding: 40px 4%;
+            }
+
+            .calculator-card {
+                padding: 20px 15px;
+            }
+
+            .coverage {
+                padding: 40px 4%;
+            }
+
+            .location-tag {
+                width: 100%;
+                justify-content: center;
+                padding: 12px;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 25px;
+            }
+
+            .float-ws {
+                bottom: 75px; /* Ajuste para no solapar la barra fija inferior móvil */
+                right: 15px;
+                width: 52px;
+                height: 52px;
+                font-size: 1.8rem;
+            }
+
+            .mobile-quick-bar {
+                display: block;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .logo-text h1 {
+                font-size: 1rem;
+            }
+            .hero h2 {
+                font-size: 1.4rem;
+            }
         }
     </style>
 </head>
@@ -469,7 +739,10 @@
     <!-- BARRA DE EMERGENCIA SUPERIOR -->
     <div class="top-bar">
         <div class="top-info">
-            <span><i class="fa-solid fa-phone-volume"></i> <strong>Consultas 24hs:</strong> 11 4440-6075</span>
+            <a href="tel:1144406075">
+                <i class="fa-solid fa-phone-volume"></i>
+                <span><strong>24hs:</strong> 11 4440-6075</span>
+            </a>
             <span><i class="fa-solid fa-location-dot"></i> Alvear 1300 - Monte Grande</span>
         </div>
         <div>
@@ -486,28 +759,34 @@
                 <span>TRASLADOS Y REMOLQUES</span>
             </div>
         </a>
-        <ul class="nav-links">
-            <li><a href="#servicios">Servicios</a></li>
-            <li><a href="#cotizador">Solicitar Traslado</a></li>
-            <li><a href="#cobertura">Cobertura</a></li>
-            <li><a href="#contacto">Contacto</a></li>
+        
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#servicios" onclick="closeMenu()">Servicios</a></li>
+            <li><a href="#cotizador" onclick="closeMenu()">Solicitar Traslado</a></li>
+            <li><a href="#cobertura" onclick="closeMenu()">Cobertura</a></li>
+            <li><a href="#contacto" onclick="closeMenu()">Contacto</a></li>
         </ul>
-        <a href="tel:1144406075" class="btn-call">
+
+        <a href="tel:1144406075" class="btn-call desktop-only">
             <i class="fa-solid fa-phone"></i> LLAMAR AHORA
         </a>
+
+        <button class="mobile-toggle" id="menuBtn" aria-label="Abrir Menú">
+            <i class="fa-solid fa-bars"></i>
+        </button>
     </nav>
 
     <!-- HERO SECTION -->
     <section class="hero">
         <div class="hero-content">
             <h2>Servicio de Remolques y Traslados <span>las 24 Horas</span></h2>
-            <p>Traslados seguros de vehículos livianos, pesados, maquinaria especial y motos. Atención profesional donde lo necesites.</p>
+            <p>Traslados seguros de vehículos livianos, pesados, maquinaria especial y motos. Atención rápida y profesional donde lo necesites.</p>
             <div class="hero-buttons">
-                <a href="https://wa.me/5491144406075?text=Hola%20Remolques%20Leo,%20necesito%20cotizar%20un%20traslado" class="btn-lg btn-ws" target="_blank">
+                <a href="https://wa.me/5491144406075?text=Hola%20Remolques%20Leo,%20necesito%20cotizar%20un%20traslado" class="btn-lg btn-ws" target="_blank" rel="noopener">
                     <i class="fa-brands fa-whatsapp"></i> PEDIR GRÚA POR WHATSAPP
                 </a>
                 <a href="tel:1144406075" class="btn-lg btn-outline">
-                    <i class="fa-solid fa-phone"></i> 11 4440-6075
+                    <i class="fa-solid fa-phone"></i> LLAMAR: 11 4440-6075
                 </a>
             </div>
         </div>
@@ -524,7 +803,7 @@
             <!-- Card 1: Vehículos Livianos -->
             <div class="service-card">
                 <div class="service-img-container">
-                    <img src="https://i.postimg.cc/bJ84ZNP2/1792635361831.jpg" alt="Vehículos Livianos" id="img-livianos">
+                    <img src="https://i.postimg.cc/bJ84ZNP2/1792635361831.jpg" alt="Traslado de Vehículos Livianos - Remolques Leo" loading="lazy">
                 </div>
                 <div class="service-content">
                     <h4>Vehículos Livianos</h4>
@@ -535,7 +814,7 @@
             <!-- Card 2: Vehículos Pesados -->
             <div class="service-card">
                 <div class="service-img-container">
-                    <img src="https://i.postimg.cc/jdwD28Ct/IMG-20261021-WA0036.jpg" alt="Vehículos Pesados" id="img-pesados">
+                    <img src="https://i.postimg.cc/jdwD28Ct/IMG-20261021-WA0036.jpg" alt="Traslado de Vehículos Pesados" loading="lazy">
                 </div>
                 <div class="service-content">
                     <h4>Vehículos Pesados</h4>
@@ -546,7 +825,7 @@
             <!-- Card 3: Maquinaria Especial -->
             <div class="service-card">
                 <div class="service-img-container">
-                    <img src="https://i.postimg.cc/HLBYB5jz/IMG-20261021-WA0037.jpg" alt="Maquinaria Especial" id="img-maquinaria">
+                    <img src="https://i.postimg.cc/HLBYB5jz/IMG-20261021-WA0037.jpg" alt="Traslado de Maquinaria Especial" loading="lazy">
                 </div>
                 <div class="service-content">
                     <h4>Maquinaria Especial</h4>
@@ -557,7 +836,7 @@
             <!-- Card 4: Traslado Programado -->
             <div class="service-card">
                 <div class="service-img-container">
-                    <img src="https://i.postimg.cc/sxZ3jNm8/IMG-20261021-WA0035.jpg" alt="Traslado Programado" id="img-auxilio">
+                    <img src="https://i.postimg.cc/sxZ3jNm8/IMG-20261021-WA0035.jpg" alt="Traslados Programados" loading="lazy">
                 </div>
                 <div class="service-content">
                     <h4>Traslados Programados</h4>
@@ -568,7 +847,7 @@
             <!-- Card 5: Traslado de Motos -->
             <div class="service-card">
                 <div class="service-img-container">
-                    <img src="https://i.postimg.cc/cCfKXmjQ/1792634920940.jpg" alt="Traslado de Motos" id="img-motos">
+                    <img src="https://i.postimg.cc/cCfKXmjQ/1792634920940.jpg" alt="Traslado de Motos" loading="lazy">
                 </div>
                 <div class="service-content">
                     <h4>Traslado de Motos</h4>
@@ -579,7 +858,7 @@
             <!-- Card 6: Larga Distancia -->
             <div class="service-card">
                 <div class="service-img-container">
-                    <img src="https://i.postimg.cc/DwRTwTm7/1792635236846.jpg" alt="Larga Distancia" id="img-largadistancia">
+                    <img src="https://i.postimg.cc/DwRTwTm7/1792635236846.jpg" alt="Traslados Larga Distancia" loading="lazy">
                 </div>
                 <div class="service-content">
                     <h4>Larga Distancia</h4>
@@ -599,7 +878,7 @@
         <div class="calculator-card">
             <form id="quoteForm">
                 <div class="form-group">
-                    <label><i class="fa-solid fa-car"></i> Tipo de Vehículo o Carga</label>
+                    <label for="tipoVehiculo"><i class="fa-solid fa-car"></i> Tipo de Vehículo o Carga</label>
                     <select class="form-control" id="tipoVehiculo" required>
                         <option value="Auto / Utilitario">Auto / SUV / Utilitario</option>
                         <option value="Camioneta 4x4 / Combi">Camioneta 4x4 / Combi</option>
@@ -609,18 +888,18 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label><i class="fa-solid fa-location-arrow"></i> Dirección de Origen (Retiro)</label>
+                    <label for="origen"><i class="fa-solid fa-location-arrow"></i> Dirección de Origen (Retiro)</label>
                     <input type="text" class="form-control" id="origen" placeholder="Ej: Monte Grande / San Martín / Ruta 8 km 25" required>
                 </div>
                 <div class="form-group">
-                    <label><i class="fa-solid fa-flag-checkered"></i> Dirección de Destino (Entrega)</label>
+                    <label for="destino"><i class="fa-solid fa-flag-checkered"></i> Dirección de Destino (Entrega)</label>
                     <input type="text" class="form-control" id="destino" placeholder="Ej: Taller en Devoto / Domicilio particular" required>
                 </div>
                 <div class="form-group">
-                    <label><i class="fa-solid fa-circle-info"></i> Detalles Adicionales / Comentarios</label>
-                    <input type="text" class="form-control" id="motivo" placeholder="Ej: Rueda trabada, sin motor, vehículo en subsuelo, etc.">
+                    <label for="motivo"><i class="fa-solid fa-circle-info"></i> Detalles Adicionales / Comentarios</label>
+                    <input type="text" class="form-control" id="motivo" placeholder="Ej: Rueda trabada, sin motor, en subsuelo, etc.">
                 </div>
-                <button type="submit" class="btn-lg btn-ws" style="width: 100%; justify-content: center; border: none; cursor: pointer; margin-top: 10px;">
+                <button type="submit" class="btn-lg btn-ws" style="width: 100%; border: none; cursor: pointer; margin-top: 10px;">
                     <i class="fa-brands fa-whatsapp"></i> ENVIAR SOLICITUD POR WHATSAPP
                 </button>
             </form>
@@ -648,13 +927,13 @@
         <div class="footer-grid">
             <div class="footer-col">
                 <h4>REMOLQUES LEO</h4>
-                <p>Servicios profesionales de remolque, traslado de vehículos y transporte de maquinarias las 24 horas del día.</p>
+                <p style="margin-bottom: 0;">Servicios profesionales de remolque, traslado de vehículos y transporte de maquinarias las 24 horas del día.</p>
             </div>
             <div class="footer-col">
                 <h4>Contacto Directo</h4>
-                <p><i class="fa-solid fa-phone" style="color: var(--primary);"></i> 11 4440-6075</p>
-                <p><i class="fa-brands fa-whatsapp" style="color: var(--whatsapp-green);"></i> +54 9 11 4440-6075</p>
-                <p><i class="fa-solid fa-envelope" style="color: var(--primary);"></i> Remolquesleo11@gmail.com</p>
+                <a href="tel:1144406075"><i class="fa-solid fa-phone" style="color: var(--primary);"></i> 11 4440-6075</a>
+                <a href="https://wa.me/5491144406075" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp" style="color: var(--whatsapp-green);"></i> +54 9 11 4440-6075</a>
+                <a href="mailto:Remolquesleo11@gmail.com"><i class="fa-solid fa-envelope" style="color: var(--primary);"></i> Remolquesleo11@gmail.com</a>
                 <p><i class="fa-solid fa-location-dot" style="color: var(--primary);"></i> Alvear 1300 - Monte Grande</p>
             </div>
             <div class="footer-col">
@@ -668,13 +947,51 @@
         </div>
     </footer>
 
+<!-- BARRA RÁPIDA FIJA INFERIOR PARA TELÉFONOS -->
+    <div class="mobile-quick-bar">
+        <div class="mobile-quick-buttons">
+            <a href="tel:1144406075" class="mobile-quick-btn call">
+                <i class="fa-solid fa-phone"></i> LLAMAR 24HS
+            </a>
+            <a href="https://wa.me/5491144406075?text=Hola%20Remolques%20Leo,%20necesito%20cotizar%20un%20traslado" class="mobile-quick-btn ws" target="_blank" rel="noopener">
+                <i class="fa-brands fa-whatsapp"></i> WHATSAPP
+            </a>
+        </div>
+    </div>
+
     <!-- BOTÓN FLOTANTE DE WHATSAPP -->
-    <a href="https://wa.me/5491144406075?text=Hola%20Remolques%20Leo,%20necesito%20cotizar%20un%20traslado" class="float-ws" target="_blank" title="Contactar por WhatsApp">
+    <a href="https://wa.me/5491144406075?text=Hola%20Remolques%20Leo,%20necesito%20cotizar%20un%20traslado" class="float-ws" target="_blank" rel="noopener" title="Contactar por WhatsApp" aria-label="Escribir por WhatsApp">
         <i class="fa-brands fa-whatsapp"></i>
     </a>
 
-    <!-- SCRIPT ENVÍO FORMULARIO A WHATSAPP -->
+    <!-- SCRIPT MENÚ MÓVIL Y ENVÍO A WHATSAPP -->
     <script>
+        // Control de menú desplegable móvil
+        const menuBtn = document.getElementById('menuBtn');
+        const navLinks = document.getElementById('navLinks');
+
+        menuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            const icon = menuBtn.querySelector('i');
+            if (navLinks.classList.contains('active')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-xmark');
+            } else {
+                icon.classList.remove('fa-xmark');
+                icon.classList.add('fa-bars');
+            }
+        });
+
+        function closeMenu() {
+            if (navLinks.classList.contains('active')) {
+                navLinks.classList.remove('active');
+                const icon = menuBtn.querySelector('i');
+                icon.classList.remove('fa-xmark');
+                icon.classList.add('fa-bars');
+            }
+        }
+
+        // Envío de formulario a WhatsApp
         document.getElementById('quoteForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
