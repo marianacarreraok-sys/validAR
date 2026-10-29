@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema Integrado de Matriculación Sanitaria | SISA-RTE</title>
+    <style>
+        :root {
+            --primary: #1e3a8a; /* Azul institucional sobrio */
+            --primary-dark: #1e293b;
+            --accent: #0f766e; /* Verde institucional / salud */
+            --whatsapp: #16a34a;
+            --whatsapp-dark: #15803d;
+            --bg-light: #f1f5f9;
+            --card-bg: #ffffff;
+            --text-dark: #334155;
+            --border-color: #cbd5e1;
+            --highlight-bg: #fef3c7;
+            --highlight-border: #f59e0b;
+        }
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            margin: 0;
+            padding: 40px 20px;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            padding: 50px;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+            border-top: 5px solid var(--primary);
+        }
+        .header-institucional {
+            text-align: center;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 25px;
+            margin-bottom: 30px;
+        }
+        .header-institucional span {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent);
+            font-weight: 700;
+            display: block;
+            margin-bottom: 8px;
+        }
+        h1 {
+            color: var(--primary);
+            font-size: 1.8rem;
+            margin: 0 0 10px 0;
+            font-weight: 700;
+        }
+        .subtitle {
+            color: #64748b;
+            font-size: 1rem;
+            margin: 0;
+        }
+        .info-box {
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            border-left: 4px solid var(--primary);
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            font-size: 0.95rem;
+        }
+        .info-box h3 {
+            margin-top: 0;
+            color: var(--primary);
+            font-size: 1.05rem;
+        }
+        .cost-box {
+            background: var(--highlight-bg);
+            border: 1px solid var(--highlight-border);
+            border-left: 4px solid #d97706;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 4px;
+            font-size: 0.95rem;
+        }
+        .cost-box h3 {
+            margin-top: 0;
+            color: #b45309;
+            font-size: 1.05rem;
+        }
+        .cost-box ul {
+            margin: 10px 0 0 0;
+            padding-left: 20px;
+        }
+        .cost-box li {
+            margin-bottom: 6px;
+        }
+        fieldset {
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 25px;
+            margin-bottom: 25px;
+            background: #ffffff;
+        }
+        legend {
+            font-weight: 700;
+            color: var(--primary);
+            background: #ffffff;
+            padding: 0 12px;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #475569;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 0.95rem;
+            background-color: #fff;
+            color: #1e293b;
+            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        }
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
+        }
+        .row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .checkbox-group {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 12px;
+            background: #f8fafc;
+            padding: 12px;
+            border-radius: 4px;
+            border: 1px solid #e2e8f0;
+        }
+        .checkbox-group input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-top: 2px;
+            cursor: pointer;
+        }
+        .checkbox-group label {
+            margin-bottom: 0;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--text-dark);
+            font-size: 0.9rem;
+        }
+        .btn-submit {
+            background-color: var(--whatsapp);
+            color: white;
+            border: none;
+            padding: 16px 24px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.2s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 6px -1px rgba(22, 163, 74, 0.2);
+        }
+        .btn-submit:hover {
+            background-color: var(--whatsapp-dark);
+        }
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            .row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header-institucional">
+        <span>Gestión y Articulación Federal</span>
+        <h1>Formulario Único de Matriculación Sanitaria</h1>
+        <p class="subtitle">Validación y Registro SISA-RTE / REFEPS</p>
+    </div>
+
+    <div class="info-box">
+        <h3>Marco Operativo y Propósito</h3>
+        <p>Obtené tu Licenciatura o Título de Grado en Salud formalmente articulado en el Sistema Integrado de Información Sanitaria Argentino (SISA-RTE / REFEPS). Procedimiento ágil, seguro y online para profesionales e instituciones del ámbito sanitario.</p>
+        <p style="margin-top: 5px;"><strong>💼 Ideal para:</strong> Médicos, enfermeros, kinesiólogos, odontólogos y otras disciplinas del equipo de salud que necesiten regularizar o agilizar su habilitación profesional federal.</p>
+    </div>
+
+    <div class="cost-box">
+        <h3>📌 Proceso y Arancel</h3>
+        <ul>
+            <li><strong> Validación académica:</strong> Relevamiento de antecedentes y de tu institución de egreso (Universidades públicas y privadas de todo el país).</li>
+            <li><strong> Carga inicial:</strong> El registro de tu número de DNI en el sistema es gratuito y el usuario se crea inicialmente en estado <strong>NO ACTIVO</strong>.</li>
+            <li><strong> Verificación y Pago contra entrega:</strong> El arancel de <strong>$100.000</strong> corresponde al costo de la documentación completa (diploma y analítico). Se abona únicamente cuando la documentación esté finalizada y hayas corroborado que todo está correcto. Al abonar, se efectúa la activación inmediata y definitiva de tu perfil en el sistema.</li>
+        </ul>
+    </div>
+
+    <form id="matriculaInstitucionalForm">
+        
+        <!-- Sección 1 -->
+        <fieldset>
+            <legend>1. Identificación</legend>
+            <div class="row">
+                <div class="form-group">
+                    <label for="nombre">Nombres:</label>
+                    <input type="text" id="nombre" required placeholder="Conforme a DNI">
+                </div>
+                <div class="form-group">
+                    <label for="apellido">Apellidos:</label>
+                    <input type="text" id="apellido" required placeholder="Conforme a DNI">
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <label for="dni">Número de Documento (DNI):</label>
+                    <input type="text" id="dni" required placeholder="Sin puntos ni espacios">
+                </div>
+                <div class="form-group">
+                    <label for="cuil">Clave Única de Identificación Laboral (CUIL):</label>
+                    <input type="text" id="cuil" required placeholder="Ej: 20-XXXXXXXX-X">
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <label for="email">Correo Electrónico:</label>
+                    <input type="email" id="email" required placeholder="usuario@dominio.com">
+                </div>
+                <div class="form-group">
+                    <label for="telefono">Teléfono de Contacto:</label>
+                    <input type="tel" id="telefono" required placeholder="Cod. de área + número">
+                </div>
+            </div>
+        </fieldset>
+
+        <!-- Sección 2 -->
+        <fieldset>
+            <legend>2. Especialidad</legend>
+            <div class="form-group">
+                <label for="profesion">Título de Grado / Profesión de Salud:</label>
+                <select id="profesion" required>
+                    <option value="">Seleccione profesión...</option>
+                    <option value="Medicina">Medicina Profesional</option>
+                    <option value="Enfermería">Licenciatura en Enfermería</option>
+                    <option value="Kinesiología y Fisiatría">Licenciatura en Kinesiología y Fisiatría</option>
+                    <option value="Odontología">Licenciatura en Odontología</option>
+                    <option value="Psicología">Licenciatura en Psicología</option>
+                    <option value="Licenciatura en Nutrición">Licenciatura en Nutrición</option>
+                    <option value="Otra disciplina del ámbito sanitario">Otra disciplina del ámbito sanitario</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="especialidad">Especialidad Sanitaria (si corresponde):</label>
+                <input type="text" id="especialidad" placeholder="Indicar especialidad o posgrado (Dejar en blanco si aplica únicamente a título de grado)">
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <label for="institucion">Institución Educativa de Egreso:</label>
+                    <select id="institucion" required>
+                        <option value="">Seleccione institución...</option>
+                        <option value="Universidad Nacional de La Plata - Facultad de Ciencias Médicas">Universidad Nacional de La Plata - Facultad de Ciencias Médicas</option>
+                        <option value="Universidad de Buenos Aires (UBA) - Facultad de Medicina">Universidad de Buenos Aires (UBA) - Facultad de Medicina</option>
+                        <option value="Universidad Nacional de Rosario (UNR) - Facultad de Ciencias Médicas">Universidad Nacional de Rosario (UNR) - Facultad de Ciencias Médicas</option>
+                        <option value="Universidad Nacional de Córdoba (UNC) - Facultad de Ciencias Médicas">Universidad Nacional de Córdoba (UNC) - Facultad de Ciencias Médicas</option>
+                        <option value="Universidad Nacional de Cuyo (UNCUYO) - Facultad de Ciencias Médicas">Universidad Nacional de Cuyo (UNCUYO) - Facultad de Ciencias Médicas</option>
+                        <option value="Universidad Nacional de Tucumán (UNT) - Facultad de Medicina">Universidad Nacional de Tucumán (UNT) - Facultad de Medicina</option>
+                        <option value="Universidad Nacional del Litoral (UNL) - Facultad de Ciencias Médicas">Universidad Nacional del Litoral (UNL) - Facultad de Ciencias Médicas</option>
+                        <option value="Universidad Austral - Facultad de Ciencias Biomédicas">Universidad Austral - Facultad de Ciencias Biomédicas</option>
+                        <option value="Universidad Católica Argentina (UCA) - Facultad de Ciencias Médicas">Universidad Católica Argentina (UCA) - Facultad de Ciencias Médicas</option>
+                        <option value="Universidad Favaloro - Facultad de Ciencias Médicas">Universidad Favaloro - Facultad de Ciencias Médicas</option>
+                        <option value="Instituto Universitario del Hospital Italiano - Departamento de Ciencias de la Salud">Instituto Universitario del Hospital Italiano - Departamento de Ciencias de la Salud</option>
+                        <option value="Fundación Barceló - Facultad de Medicina">Fundación Barceló - Facultad de Medicina</option>
+                        <option value="Universidad Abierta Interamericana (UAI) - Facultad de Medicina y Ciencias de la Salud">Universidad Abierta Interamericana (UAI) - Facultad de Medicina y Ciencias de la Salud</option>
+                        <option value="Universidad del Salvador (USAL) - Facultad de Medicina">Universidad del Salvador (USAL) - Facultad de Medicina</option>
+                        <option value="Universidad Maimónides - Escuela de Ciencias de la Salud">Universidad Maimónides - Escuela de Ciencias de la Salud</option>
+                        <option value="Instituto Universitario CEMIC - Instituto Universitario CEMIC">Instituto Universitario CEMIC - Instituto Universitario CEMIC</option>
+                        <option value="Otra institución / No figura en lista">Otra institución / No figura en lista</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="anio_egreso">Año de Egreso:</label>
+                    <input type="number" id="anio_egreso" required min="1950" max="2026" placeholder="Ej: 2025">
+                </div>
+            </div>
+        </fieldset>
+
+        <!-- Sección 3: Modalidad de Atención -->
+        <fieldset>
+            <legend>3. Modalidad de Gestión</legend>
+            <div class="form-group">
+                <label for="modalidad">Seleccione su modalidad de preferencia:</label>
+                <select id="modalidad" required>
+                    <option value="">Seleccione modalidad...</option>
+                    <option value="Modalidad a distancia (100% Online)">Modalidad a distancia (100% Online)</option>
+                    <option value="Modalidad presencial (Oficina / Sede)">Modalidad presencial (Oficina / Sede)</option>
+                </select>
+            </div>
+        </fieldset>
+
+        <!-- Sección 4 -->
+        <fieldset>
+            <legend>4. Jurisdicción y Parámetros</legend>
+            <div class="form-group">
+                <label for="jurisdiccion">Jurisdicción de Competencia / Ejercicio:</label>
+                <select id="jurisdiccion" required>
+                    <option value="">Seleccione jurisdicción de matriculación...</option>
+                    <option value="Nacional (Ministerio de Salud de la Nación / REFEPS)">Nacional (Ministerio de Salud de la Nación / REFEPS)</option>
+                    <option value="Buenos Aires">Buenos Aires</option>
+                    <option value="Catamarca">Catamarca</option>
+                    <option value="Chaco">Chaco</option>
+                    <option value="Chubut">Chubut</option>
+                    <option value="Ciudad Autónoma de Buenos Aires (CABA)">Ciudad Autónoma de Buenos Aires (CABA)</option>
+                    <option value="Córdoba">Córdoba</option>
+                    <option value="Corrientes">Corrientes</option>
+                    <option value="Entre Ríos">Entre Ríos</option>
+                    <option value="Formosa">Formosa</option>
+                    <option value="Jujuy">Jujuy</option>
+                    <option value="La Pampa">La Pampa</option>
+                    <option value="La Rioja">La Rioja</option>
+                    <option value="Mendoza">Mendoza</option>
+                    <option value="Misiones">Misiones</option>
+                    <option value="Neuquén">Neuquén</option>
+                    <option value="Río Negro">Río Negro</option>
+                    <option value="Salta">Salta</option>
+                    <option value="San Juan">San Juan</option>
+                    <option value="San Luis">San Luis</option>
+                    <option value="Santa Cruz">Santa Cruz</option>
+                    <option value="Santa Fe">Santa Fe</option>
+                    <option value="Santiago del Estero">Santiago del Estero</option>
+                    <option value="Tierra del Fuego">Tierra del Fuego</option>
+                    <option value="Tucumán">Tucumán</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="nro_tramite_dni">Número de Trámite (DNI - Credencial Vigente):</label>
+                <input type="text" id="nro_tramite_dni" required placeholder="11 dígitos impresos en el documento">
+            </div>
+            <div class="form-group">
+                <label for="comentarios">Observaciones y Estado Documental:</label>
+                <textarea id="comentarios" rows="3" placeholder="Detalle cualquier antecedente relevante, pre-matrícula previa o estado de validación analítica..."></textarea>
+            </div>
+        </fieldset>
+
+        <!-- Sección 5: Checklist de Aceptación y Arancel -->
+        <fieldset>
+            <legend>5. Conformidad de Arancel y Proceso SISA-RTE</legend>
+            <div class="checkbox-group">
+                <input type="checkbox" id="check_documentacion" required>
+                <label for="check_documentacion">Confirmo que poseo la documentación académica digital respaldatoria para la emisión del título solicitado.</label>
+            </div>
+            <div class="checkbox-group">
+                <input type="checkbox" id="check_proceso" required>
+                <label for="check_proceso">Comprendo que la carga inicial de mi DNI es gratuita y el usuario se crea inicialmente en estado NO ACTIVO.</label>
+            </div>
+            <div class="checkbox-group">
+                <input type="checkbox" id="check_pago" required>
+                <label for="check_pago">Acepto el arancel de <strong>$100.000</strong> por la documentación completa (diploma y analítico), el cual se abonará únicamente tras verificar que todo está correcto para proceder a la activación inmediata y definitiva.</label>
+            </div>
+        </fieldset>
+
+        <button type="button" class="btn-submit" onclick="enviarWhatsAppInstitucional()">
+            <span> Comenzar mi gestión ahora</span>
+        </button>
+    </form>
+</div>
+
+<script>
+    function enviarWhatsAppInstitucional() {
+        const numeroWhatsApp = "5491123472516"; 
+
+        const nombre = document.getElementById('nombre').value.trim();
+        const apellido = document.getElementById('apellido').value.trim();
+        const dni = document.getElementById('dni').value.trim();
+        const cuil = document.getElementById('cuil').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const telefono = document.getElementById('telefono').value.trim();
+        const profesion = document.getElementById('profesion').value;
+        const especialidad = document.getElementById('especialidad').value.trim() || "No aplica / Título de Grado";
+        const institucion = document.getElementById('institucion').value;
+        const anio_egreso = document.getElementById('anio_egreso').value.trim();
+        const modalidad = document.getElementById('modalidad').value;
+        const jurisdiccion = document.getElementById('jurisdiccion').value;
+        const nro_tramite_dni = document.getElementById('nro_tramite_dni').value.trim();
+        const comentarios = document.getElementById('comentarios').value.trim() || "Sin observaciones adicionales";
+        
+        const c1 = document.getElementById('check_documentacion').checked;
+        const c2 = document.getElementById('check_proceso').checked;
+        const c3 = document.getElementById('check_pago').checked;
+
+        if (!nombre || !apellido || !dni || !cuil || !email || !telefono || !profesion || !institucion || !anio_egreso || !modalidad || !jurisdiccion || !nro_tramite_dni) {
+            alert("Por favor, complete todos los campos obligatorios estipulados en el formulario para proceder.");
+            return;
+        }
+
+        if (!c1 || !c2 || !c3) {
+            alert("Debe tildar y aceptar los puntos del checklist de conformidad sobre el proceso SISA-RTE y el arancel correspondiente.");
+            return;
+        }
+
+        const mensaje = `*SOLICITUD DE HABILITACIÓN SISA-RTE / REFEPS* ⏱️\n` +
+                        `----------------------------------------\n` +
+                        `*1. IDENTIFICACIÓN DEL PROFESIONAL*\n` +
+                        `• Apellido y Nombres: ${apellido}, ${nombre}\n` +
+                        `• DNI: ${dni}\n` +
+                        `• CUIL: ${cuil}\n` +
+                        `• Correo Electrónico: ${email}\n` +
+                        `• Teléfono: ${telefono}\n` +
+                        `• Nro. Trámite DNI: ${nro_tramite_dni}\n\n` +
+                        `*2. ANTECEDENTES ACADÉMICOS*\n` +
+                        `• Título / Profesión: ${profesion}\n` +
+                        `• Especialidad: ${especialidad}\n` +
+                        `• Institución Emisora: ${institucion}\n` +
+                        `• Año de Egreso: ${anio_egreso}\n\n` +
+                        `*3. MODALIDAD DE GESTIÓN*\n` +
+                        `• Preferencia: ${modalidad}\n\n` +
+                        `*4. PARÁMETROS SISA-RTE / REFEPS*\n` +
+                        `• Jurisdicción Solicitada: ${jurisdiccion}\n` +
+                        `• Observaciones: ${comentarios}\n\n` +
+                        `*5. CONDICIONES Y PAGO CONTRA ENTREGA*\n` +
+                        `• Arancel Documentación Completa: $300.000 (Pago contra verificación previa)\n` +
+                        `• Estado inicial usuario: NO ACTIVO (Pasa a ACTIVO tras pago)\n` +
+                        `• Conformidad del cliente: Aceptada vía Checklist\n` +
+                        `----------------------------------------\n` +
+                        `_Mensaje generado automáticamente mediante plataforma web._`;
+
+        const mensajeCodificado = encodeURIComponent(mensaje);
+        const urlWhatsApp = `https://wa.me/${numeroWhatsApp}?text=${mensajeCodificado}`;
+        window.open(urlWhatsApp, '_blank');
+    }
+</script>
+
+</body>
+</html>
