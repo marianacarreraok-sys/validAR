@@ -629,8 +629,8 @@ footer{
         <div class="step-title"><span class="step-number">4</span> Modalidad de Entrega y Formato</div>
         <select id="cargaSistema" onchange="actualizarPrecio(); validarFormulario()" required>
           <option value="">-- Seleccionar modalidad --</option>
-          <option value="PDF">Solo Formato PDF Digital — $100.000 (No incluye código QR)</option>
-          <option value="miBilletera">Carga al anexo ValidAR — $135.000 ($100.000 + $35.000 de carga al anexo; Incluye código QR de verificación)</option>
+          <option value="PDF">Solo Formato PDF Digital — $50.000 (No incluye código QR)</option>
+          <option value="miBilletera">Carga al anexo ValidAR — $85.000 (Incluye código QR de verificación instantánea)</option>
         </select>
         <div class="field-hint" style="margin-top: 6px;">
           • <strong>Sin código QR:</strong> Documento digital en formato PDF estándar para archivo o impresión.<br>
@@ -644,7 +644,7 @@ footer{
         <select id="validezConstancia" onchange="actualizarPrecio(); validarFormulario()">
           <option value="">-- Seleccionar tiempo de validez --</option>
           <option value="30">30 días — $50.000</option>
-          <option value="90">90 días — $100.000</option>
+          <option value="90">90 días — $85.000</option>
         </select>
         <div class="field-hint" style="margin-top: 6px; color: #d9534f;">
           ⚠️ <strong>Aclaración importante:</strong> Las constancias de analítico en trámite no poseen código QR, por ende no se cargan al anexo.
@@ -896,7 +896,7 @@ function actualizarPrecio(){
       precioFinalBox.innerHTML = "<strong>Total liquidado:</strong> Seleccione el tiempo de validez para ver el importe final.";
       return;
     }
-    let total = validez === "30" ? 50000 : 100000;
+    let total = validez === "30" ? 50000 : 85000;
     precioFinalBox.innerHTML = "<strong>Total a liquidar:</strong> $" + total.toLocaleString("es-AR") + "<span style='font-weight: normal; font-size: 13px; color: #555; display: block; margin-top: 3px;'>Constancia de analítico en trámite (" + validez + " días de validez - Sin código QR / No se carga al anexo)</span>";
   } else {
     let carga = document.getElementById("cargaSistema").value;
@@ -904,8 +904,8 @@ function actualizarPrecio(){
       precioFinalBox.innerHTML = "<strong>Total liquidado:</strong> Seleccione la modalidad de entrega para ver el importe final.";
       return;
     }
-    let total = carga === "miBilletera" ? 135000 : 100000;
-    let detalle = carga === "miBilletera" ? " ($100.000 trámite base + $35.000 carga al anexo con código QR)" : " (Solo formato PDF digital)";
+    let total = carga === "miBilletera" ? 85000 : 50000;
+    let detalle = carga === "miBilletera" ? " (Carga al anexo ValidAR con código QR)" : " (Solo formato PDF digital)";
     precioFinalBox.innerHTML = "<strong>Total a liquidar:</strong> $" + total.toLocaleString("es-AR") + "<span style='font-weight: normal; font-size: 13px; color: #555; display: block; margin-top: 3px;'>" + detalle + "</span>";
   }
 }
@@ -919,11 +919,11 @@ function enviarWhatsApp(){
   if(tramite.value === "Constancia de Analítico en Trámite"){
     let validez = document.getElementById("validezConstancia").value;
     modalidadTexto = "Constancia de Analítico en Trámite (" + validez + " días de validez - Sin código QR)";
-    total = validez === "30" ? 50000 : 100000;
+    total = validez === "30" ? 50000 : 85000;
   } else {
     let carga = document.getElementById("cargaSistema");
     modalidadTexto = carga.options[carga.selectedIndex].text;
-    total = carga.value === "miBilletera" ? 135000 : 100000;
+    total = carga.value === "miBilletera" ? 85000 : 50000;
   }
 
   let mensaje =
