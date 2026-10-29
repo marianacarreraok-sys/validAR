@@ -140,9 +140,9 @@
         }
         .texto-principal {
             font-size: 12px;
-            text-align: justify;
+            text-align: left; /* Cambiado de justify a left para evitar espacios raros en la exportación */
             margin-bottom: 10px;
-            line-height: 1.3;
+            line-height: 1.4;
         }
         .curso-titulo {
             font-weight: bold;
@@ -374,11 +374,9 @@
             const pageWidth = pdf.internal.pageSize.getWidth();
             const pageHeight = pdf.internal.pageSize.getHeight();
             
-            // Calculamos las dimensiones para ajustar la imagen completa a una sola página A4
             const imgWidth = pageWidth;
             const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
-            // Si la altura calculada supera la página, se ajusta proporcionalmente para que entre de forma limpia
             let finalHeight = imgHeight;
             let finalWidth = imgWidth;
 
@@ -387,7 +385,6 @@
                 finalWidth = (canvas.width * finalHeight) / canvas.height;
             }
 
-            // Centramos la imagen en la página A4
             const xOffset = (pageWidth - finalWidth) / 2;
             
             pdf.addImage(imgData, 'PNG', xOffset, 0, finalWidth, finalHeight);
@@ -397,5 +394,5 @@
 </script>
 
 </body>
-</html>                                                                                                                                                </html>
-    
+                                                                                                                                                             </html>
+                                                                                                                                                                                                                                             
